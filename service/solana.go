@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,6 +16,12 @@ const (
 	IdValue = 1
 	GetSlotMethodName = "getSlot"
 	GetBlockMethodName = "getBlock"
+	DefaultGetBlockParamsBody =  GetBlockParamsBody {
+		Enconding: "json"
+		TransactionVersion: 0
+		TransactionDetails: "full"
+		Rewards: ""
+	}
 )
 
 type RpcCallWithoutParameters struct {
@@ -36,47 +43,78 @@ type GetSlotResponseBody struct {
 	Id int `json:"id"`
 }
 
+type GetBlockResponseBody struct {
+	JsonRpc string `json:"jsonRpc"`
+	Result  `json:"result"`
+	Id int `json:"id"`
+}
 
-func GetSlot() {
+type GetBlockParamsBody struct {
+	Enconding string `json:"encoding"`
+	TransactionVersion int `json:"maxSupportedTransactionVersion"`
+	TransactionDetails string `json:"transactionDetails"`
+	Rewards bool `json:"rewards"`
+}
+
+"encoding": "json",
+"maxSupportedTransactionVersion":0,
+  "transactionDetails":"full",
+  "rewards":false
+
+type GetBlockResponseResultBody struct {
+
+}
+
+type Transaction
+
+func GetSlot() GetSlotResponseBody {
 	rpcCall := RpcCallWithoutParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
 		Method: GetSlotMethodName,
 	}
-	res, err := http.Post(BaseUrl, ApplicationJsonContentType, )
+	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		fmt.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetSlotMethodName, err.Error())
-		return
+	}
+	fmt.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetSlotMethodName, res.StatusCode)
+	var slotResponse GetSlotResponseBody
+	readResponseBody(res.Body, slotResponse)
+	return slotResponse
+}
+
+func GetBlock(slotNumber int) Get {
+	rpcCall := RpcCallWithParameters {
+		JsonRpc: JsonRpcValue,
+		Id: IdValue,
+		Method: GetBlockMethodName,
+		Params: []interface{}{ slotNumber,  }
+	}
+	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
+	if err != nil {
+		fmt.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 	}
 	fmt.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
-	bytes := readResponseBody(res.Body)
 	var slotResponse GetSlotResponseBody
-	resBody, err := fromJson(bytes, &slotResponse)
-
+	readResponseBody(res.Body, slotResponse)
+	return slotResponse
 }
 
-
-func GetBlock() {
-
-}
-
-
-func readResponseBody(closer io.ReadCloser, interface{}) any {
+func readResponseBody[T any](closer io.ReadCloser, t T) {
 	body, err := io.ReadAll(closer)
 	if err != nil {
 		fmt.Printf("Error reading response body: %q\n", err.Error())
 	}
-	err1 := json.Unmarshal(body, )
+	err1 := json.Unmarshal(body, t)
 	if err1 != nil {
-		fmt.Printf("Error when convert body to json, error : %q\n", err.Error())
+		fmt.Printf("Error when convert body to json, error : %q\n", err1.Error())
 	}
-	return res
 }
 
-func toJson(v any) []byte {
+func toJsonIoReader(v any) io.Reader {
 	res, err := json.Marshal(v)
 	if err != nil {
 		fmt.Printf("Error when convert value: %q to json, error: %q\n", v, err.Error())
 	}
-	return res
+	return bytes.NewBuffer(res)
 }
