@@ -8,20 +8,13 @@ import (
 	"net/http"
 )
 
-const BaseUrl = "https://api.mainnet-beta.solana.com"
-
 const (
+	BaseUrl = "https://api.mainnet-beta.solana.com"
 	ApplicationJsonContentType = "application/json"
 	JsonRpcValue = "2.0"
 	IdValue = 1
 	GetSlotMethodName = "getSlot"
 	GetBlockMethodName = "getBlock"
-	DefaultGetBlockParamsBody =  GetBlockParamsBody {
-		Enconding: "json"
-		TransactionVersion: 0
-		TransactionDetails: "full"
-		Rewards: ""
-	}
 )
 
 type RpcCallWithoutParameters struct {
@@ -56,16 +49,16 @@ type GetBlockParamsBody struct {
 	Rewards bool `json:"rewards"`
 }
 
-"encoding": "json",
-"maxSupportedTransactionVersion":0,
-  "transactionDetails":"full",
-  "rewards":false
-
 type GetBlockResponseResultBody struct {
 
 }
 
-type Transaction
+var defaultGetBlockParamsBody = GetBlockParamsBody {
+	Enconding: "json",
+	TransactionVersion: 0,
+	TransactionDetails: "full",
+	Rewards: true,
+}
 
 func GetSlot() GetSlotResponseBody {
 	rpcCall := RpcCallWithoutParameters {
@@ -83,21 +76,21 @@ func GetSlot() GetSlotResponseBody {
 	return slotResponse
 }
 
-func GetBlock(slotNumber int) Get {
+func GetBlock(slotNumber int) GetBlockResponseBody {
 	rpcCall := RpcCallWithParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
 		Method: GetBlockMethodName,
-		Params: []interface{}{ slotNumber,  }
+		Params: []interface{}{ slotNumber, defaultGetBlockParamsBody },
 	}
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		fmt.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 	}
 	fmt.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
-	var slotResponse GetSlotResponseBody
-	readResponseBody(res.Body, slotResponse)
-	return slotResponse
+	var blockResponse GetBlockResponseBody
+	readResponseBody(res.Body, blockResponse)
+	return blockResponse
 }
 
 func readResponseBody[T any](closer io.ReadCloser, t T) {
@@ -118,3 +111,4 @@ func toJsonIoReader(v any) io.Reader {
 	}
 	return bytes.NewBuffer(res)
 }
+
