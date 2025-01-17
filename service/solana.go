@@ -17,49 +17,6 @@ const (
 	GetBlockMethodName = "getBlock"
 )
 
-type RpcCallWithoutParameters struct {
-	JsonRpc string `json:"jsonRpc"`
-	Id int `json:"id"`
-	Method string `json:"method"`
-}
-
-type RpcCallWithParameters struct {
-	JsonRpc string `json:"jsonRpc"`
-	Id int `json:"id"`
-	Method string `json:"method"`
-	Params []interface{} `json:"params"`
-}
-
-type GetSlotResponseBody struct {
-	JsonRpc string `json:"jsonRpc"`
-	Result int64 `json:"result"`
-	Id int `json:"id"`
-}
-
-type GetBlockResponseBody struct {
-	JsonRpc string `json:"jsonRpc"`
-	Result  `json:"result"`
-	Id int `json:"id"`
-}
-
-type GetBlockParamsBody struct {
-	Enconding string `json:"encoding"`
-	TransactionVersion int `json:"maxSupportedTransactionVersion"`
-	TransactionDetails string `json:"transactionDetails"`
-	Rewards bool `json:"rewards"`
-}
-
-type GetBlockResponseResultBody struct {
-
-}
-
-var defaultGetBlockParamsBody = GetBlockParamsBody {
-	Enconding: "json",
-	TransactionVersion: 0,
-	TransactionDetails: "full",
-	Rewards: true,
-}
-
 func GetSlot() GetSlotResponseBody {
 	rpcCall := RpcCallWithoutParameters {
 		JsonRpc: JsonRpcValue,
@@ -76,7 +33,7 @@ func GetSlot() GetSlotResponseBody {
 	return slotResponse
 }
 
-func GetBlock(slotNumber int) GetBlockResponseBody {
+func GetBlock(slotNumber int64) GetBlockResponseBody {
 	rpcCall := RpcCallWithParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
@@ -112,3 +69,61 @@ func toJsonIoReader(v any) io.Reader {
 	return bytes.NewBuffer(res)
 }
 
+type RpcCallWithoutParameters struct {
+	JsonRpc string `json:"jsonRpc"`
+	Id int `json:"id"`
+	Method string `json:"method"`
+}
+
+type RpcCallWithParameters struct {
+	JsonRpc string `json:"jsonRpc"`
+	Id int `json:"id"`
+	Method string `json:"method"`
+	Params []interface{} `json:"params"`
+}
+
+type GetSlotResponseBody struct {
+	JsonRpc string `json:"jsonRpc"`
+	Result int64 `json:"result"`
+	Id int `json:"id"`
+}
+
+type GetBlockResponseBody struct {
+	JsonRpc string `json:"jsonRpc"`
+	GetBlockResponseResultBody  `json:"result"`
+	Id int `json:"id"`
+}
+
+type GetBlockParamsBody struct {
+	Enconding string `json:"encoding"`
+	TransactionVersion int `json:"maxSupportedTransactionVersion"`
+	TransactionDetails string `json:"transactionDetails"`
+	Rewards bool `json:"rewards"`
+}
+
+type GetBlockResponseResultBody struct {
+	BlockHash string `json:"blockhash"`
+	PreviousBlockhash string `json:"previousBlockhash"`
+	Transactions []Transaction `json:"transactions"`
+}
+
+type Transaction struct {
+	Meta Meta `json:"meta"`
+	TransactionDetails TransactionDetails `json:"transaction"`
+}
+
+type Meta struct {
+	PostBalances []int64 `json:"PostBalances"`
+	PreBalances []int64 `json:"PreBalances"`
+}
+
+type TransactionDetails struct {
+	Signatures []string `json:"Signatures"`
+}
+
+var defaultGetBlockParamsBody = GetBlockParamsBody {
+	Enconding: "jsonParsed",
+	TransactionVersion: 0,
+	TransactionDetails: "full",
+	Rewards: true,
+}

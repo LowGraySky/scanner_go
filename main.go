@@ -1,18 +1,22 @@
 package main
 
-import "time"
-import "web3.kz/solscan/service"
+import (
+	"fmt"
+	"time"
+	"web3.kz/solscan/service"
+)
 
 func main() {
-	Scdedule()
+	go schedule()
+
+	select {}
 }
 
-func Scdedule() {
+func schedule() {
+	fmt.Print("Start analyse task")
 	ticker := time.NewTicker(5 * time.Second)
-	for {
-		select {
-		case  <-ticker.C:
-			go service.Analyse()
-		}
+	defer ticker.Stop()
+	for range ticker.C {
+		service.Analyse()
 	}
 }
