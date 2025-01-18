@@ -3,7 +3,7 @@ package service
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"web3.kz/solscan/config"
 	"io"
 	"net/http"
 )
@@ -25,9 +25,9 @@ func GetSlot() GetSlotResponseBody {
 	}
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
-		fmt.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetSlotMethodName, err.Error())
+		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetSlotMethodName, err.Error())
 	}
-	fmt.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetSlotMethodName, res.StatusCode)
+	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetSlotMethodName, res.StatusCode)
 	var slotResponse GetSlotResponseBody
 	readResponseBody(res.Body, slotResponse)
 	return slotResponse
@@ -42,9 +42,9 @@ func GetBlock(slotNumber int64) GetBlockResponseBody {
 	}
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
-		fmt.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
+		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 	}
-	fmt.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
+	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
 	var blockResponse GetBlockResponseBody
 	readResponseBody(res.Body, blockResponse)
 	return blockResponse
@@ -53,18 +53,18 @@ func GetBlock(slotNumber int64) GetBlockResponseBody {
 func readResponseBody[T any](closer io.ReadCloser, t T) {
 	body, err := io.ReadAll(closer)
 	if err != nil {
-		fmt.Printf("Error reading response body: %q\n", err.Error())
+		config.Log.Printf("Error reading response body: %q\n", err.Error())
 	}
-	err1 := json.Unmarshal(body, t)
+	err1 := json.Unmarshal(body, &t)
 	if err1 != nil {
-		fmt.Printf("Error when convert body to json, error : %q\n", err1.Error())
+		config.Log.Printf("Error when convert body to json, error : %q\n", err1.Error())
 	}
 }
 
 func toJsonIoReader(v any) io.Reader {
 	res, err := json.Marshal(v)
 	if err != nil {
-		fmt.Printf("Error when convert value: %q to json, error: %q\n", v, err.Error())
+		config.Log.Printf("Error when convert value: %q to json, error: %q\n", v, err.Error())
 	}
 	return bytes.NewBuffer(res)
 }

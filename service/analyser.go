@@ -1,28 +1,29 @@
 package service
 
 import (
-	"fmt"
 	"sync"
+	"web3.kz/solscan/config"
+)
+
+const (
+	jupiterDcaAddress  = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 )
 
 var (
-    parsedSlotMap sync.Map
+	parsedSlotMap sync.Map
 )
 
 func Analyse() {
-	slot := GetSlot()
-	if slot.isAlreadyRead() {
-		fmt.Printf("Slot with number %q already processed, SKIP", slot.Result)
+	slotNumber := GetSlot().Result
+	if isAlreadyRead(slotNumber) {
+		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
 	} else {
-		slotNumber := slot.Result
-		fmt.Printf("Begin analyse slot with number: %q", slotNumber)
-		block := GetBlock(slotNumber)
-		
+		config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
+//		block := GetBlock(slotNumber)
 	}
 }
 
-func (s GetSlotResponseBody) isAlreadyRead() bool {
-	number := s.Result
+func isAlreadyRead(number int64) bool {
 	_, exists := parsedSlotMap.Load(number)
 	return exists
 }

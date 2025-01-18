@@ -13,7 +13,7 @@ func main() {
 }
 
 func schedule() {
-	fmt.Print("Start analyse task")
+	fmt.Print("Start analyse task\n")
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {

@@ -1,7 +1,7 @@
 package service
 
-const jupiterDcaAddress = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
+import "web3.kz/solscan/config"
 
-func (GetBlockResponseResultBody) Parse() {
-	
+func Parse(blockResponse GetBlockResponseBody) {
+	config.Log.Printf("")
 }
