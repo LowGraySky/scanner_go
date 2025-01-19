@@ -31,7 +31,7 @@ func Process() {
 	}
 }
 
-func isAlreadyRead(number int) bool {
+func isAlreadyRead(number uint) bool {
 	_, exists := parsedSlotMap.Load(number)
 	return exists
 }
