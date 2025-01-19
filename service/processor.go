@@ -1,13 +1,8 @@
 package service
 
 import (
-	"log/slog"
-	"sync"
-	"web3.kz/solscan/config"
-)
-
-const (
-	jupiterDcaAddress  = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
+    "sync"
+    "web3.kz/solscan/config"
 )
 
 var (
@@ -17,7 +12,7 @@ var (
 func Process() {
 	slot, _ := GetSlot()
 	if slot.Error.Code != 0 && slot.Error.Message != "" {
-		config.Log.Info("Error when get slot number, error: %q", slot.Error)
+		config.Log.Printf("Error when get slot number, error: %q", slot.Error)
 		return
 	}
 	slotNumber := slot.Result
@@ -26,11 +21,15 @@ func Process() {
 		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
 	} else {
 		config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
-		block := GetBlock(slotNumber)
+		block, _ := GetBlock(slotNumber)
+		if block.Error.Code != 0 && block.Error.Message != "" {
+			config.Log.Printf("Error when get block information by slot with number: %q, error: %q", slotNumber, slot.Error)
+			return
+		}
+		parsedSlotMap.Store(slotNumber, nil)
+		Analyse(block.Transactions)
 	}
 }
-
-
 
 func isAlreadyRead(number int) bool {
 	_, exists := parsedSlotMap.Load(number)

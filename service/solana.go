@@ -35,7 +35,7 @@ func GetSlot() (GetSlotResponseBody, error) {
 	return slotResponse, nil
 }
 
-func GetBlock(slotNumber int64) (GetBlockResponseBody, error) {
+func GetBlock(slotNumber int) (GetBlockResponseBody, error) {
 	rpcCall := RpcCallWithParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
@@ -93,16 +93,16 @@ type GetSlotResponseBody struct {
 	Error Error `json:"error"`
 }
 
-type Error struct {
-	Code int `json:"code"`
-	Message string `json:"message"`
-}
-
 type GetBlockResponseBody struct {
 	JsonRpc string `json:"jsonrpc"`
 	GetBlockResponseResultBody  `json:"result"`
 	Id int `json:"id"`
-	Error error `json:"error"`
+	Error Error `json:"error"`
+}
+
+type Error struct {
+	Code int `json:"code"`
+	Message string `json:"message"`
 }
 
 type GetBlockParamsBody struct {
