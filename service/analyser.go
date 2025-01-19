@@ -14,13 +14,18 @@ var (
 )
 
 func Analyse() {
-	slotNumber := GetSlot().Result
-	if isAlreadyRead(slotNumber) {
-		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
-	} else {
-		config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
+	//slot, _ := GetSlot()
+//	slotNumber := slot.Result
+
+	slotNumber, _ := GetSlot()
+	config.Log.Printf("Begin analyse slot with number: %q\n", int(slotNumber.Result))
+
+//	if isAlreadyRead(slotNumber) {
+//		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
+//	} else {
+//		config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
 //		block := GetBlock(slotNumber)
-	}
+	//}
 }
 
 func isAlreadyRead(number int64) bool {

@@ -3,9 +3,9 @@ package service
 import (
 	"bytes"
 	"encoding/json"
-	"web3.kz/solscan/config"
 	"io"
 	"net/http"
+	"web3.kz/solscan/config"
 )
 
 const (
@@ -17,7 +17,7 @@ const (
 	GetBlockMethodName = "getBlock"
 )
 
-func GetSlot() GetSlotResponseBody {
+func GetSlot() (GetSlotResponseBody, error) {
 	rpcCall := RpcCallWithoutParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
@@ -26,14 +26,16 @@ func GetSlot() GetSlotResponseBody {
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetSlotMethodName, err.Error())
+		return GetSlotResponseBody{}, err
 	}
 	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetSlotMethodName, res.StatusCode)
 	var slotResponse GetSlotResponseBody
-	readResponseBody(res.Body, slotResponse)
-	return slotResponse
+	readResponseBody(res.Body, &slotResponse)
+	config.Log.Printf("Response body: %q", slotResponse)
+	return slotResponse, nil
 }
 
-func GetBlock(slotNumber int64) GetBlockResponseBody {
+func GetBlock(slotNumber int64) (GetBlockResponseBody, error) {
 	rpcCall := RpcCallWithParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
@@ -43,11 +45,13 @@ func GetBlock(slotNumber int64) GetBlockResponseBody {
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
+		return GetBlockResponseBody{}, err
 	}
 	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
 	var blockResponse GetBlockResponseBody
-	readResponseBody(res.Body, blockResponse)
-	return blockResponse
+	readResponseBody(res.Body, &blockResponse)
+	config.Log.Print("Response body: %q", blockResponse)
+	return blockResponse, nil
 }
 
 func readResponseBody[T any](closer io.ReadCloser, t T) {

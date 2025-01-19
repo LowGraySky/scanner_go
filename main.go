@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"time"
+	"web3.kz/solscan/config"
 	"web3.kz/solscan/service"
 )
 
@@ -13,7 +13,7 @@ func main() {
 }
 
 func schedule() {
-	fmt.Print("Start analyse task\n")
+	config.Log.Println("Start analyse task")
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
