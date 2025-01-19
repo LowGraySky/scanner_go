@@ -74,26 +74,32 @@ func toJsonIoReader(v any) io.Reader {
 }
 
 type RpcCallWithoutParameters struct {
-	JsonRpc string `json:"jsonRpc"`
+	JsonRpc string `json:"jsonrpc"`
 	Id int `json:"id"`
 	Method string `json:"method"`
 }
 
 type RpcCallWithParameters struct {
-	JsonRpc string `json:"jsonRpc"`
+	JsonRpc string `json:"jsonrpc"`
 	Id int `json:"id"`
 	Method string `json:"method"`
 	Params []interface{} `json:"params"`
 }
 
 type GetSlotResponseBody struct {
-	JsonRpc string `json:"jsonRpc"`
-	Result int64 `json:"result"`
+	JsonRpc string `json:"jsonrpc"`
+	Result int `json:"result"`
 	Id int `json:"id"`
+	Error Error `json:"error"`
+}
+
+type Error struct {
+	Code int `json:"code"`
+	Message string `json:"message"`
 }
 
 type GetBlockResponseBody struct {
-	JsonRpc string `json:"jsonRpc"`
+	JsonRpc string `json:"jsonrpc"`
 	GetBlockResponseResultBody  `json:"result"`
 	Id int `json:"id"`
 }

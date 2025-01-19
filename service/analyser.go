@@ -18,7 +18,7 @@ func Analyse() {
 //	slotNumber := slot.Result
 
 	slotNumber, _ := GetSlot()
-	config.Log.Printf("Begin analyse slot with number: %q\n", int(slotNumber.Result))
+	config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber.Result)
 
 //	if isAlreadyRead(slotNumber) {
 //		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
