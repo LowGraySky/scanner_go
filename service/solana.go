@@ -102,6 +102,7 @@ type GetBlockResponseBody struct {
 	JsonRpc string `json:"jsonrpc"`
 	GetBlockResponseResultBody  `json:"result"`
 	Id int `json:"id"`
+	Error error `json:"error"`
 }
 
 type GetBlockParamsBody struct {

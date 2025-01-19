@@ -17,6 +17,6 @@ func schedule() {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
-		service.Analyse()
+		service.Process()
 	}
 }
