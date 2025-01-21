@@ -12,22 +12,21 @@ var (
 func Process() {
 	slot, _ := GetSlot()
 	if slot.Error.Code != 0 && slot.Error.Message != "" {
-		config.Log.Printf("Error when get slot number, error: %q", slot.Error)
+		config.Log.Infof("Error when get slot number, error: %q", slot.Error)
 		return
 	}
 	slotNumber := slot.Result
-	config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
 	if isAlreadyRead(slotNumber) {
-		config.Log.Printf("Slot with number %q already processed, SKIP\n", slotNumber)
+		config.Log.Infof("Slot with number %q already processed, SKIP", slotNumber)
 	} else {
-		config.Log.Printf("Begin analyse slot with number: %q\n", slotNumber)
+		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
 		block, _ := GetBlock(slotNumber)
 		if block.Error.Code != 0 && block.Error.Message != "" {
-			config.Log.Printf("Error when get block information by slot with number: %q, error: %q", slotNumber, slot.Error)
+			config.Log.Infof("Error when get block information by slot with number: %d, error: %q", slotNumber, slot.Error)
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
-		Analyse(block.Transactions)
+		Analyse(slotNumber, block.Result.Transactions)
 	}
 }
 

@@ -26,13 +26,13 @@ func GetSlot() (model.GetSlotResponseBody, error) {
 	}
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
-		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetSlotMethodName, err.Error())
+		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q", GetSlotMethodName, err.Error())
 		return model.GetSlotResponseBody{}, err
 	}
-	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetSlotMethodName, res.StatusCode)
+	config.Log.Infof("Got reponse from solana RPC, method: '%q', code: %d", GetSlotMethodName, res.StatusCode)
 	var slotResponse model.GetSlotResponseBody
 	readResponseBody(res.Body, &slotResponse)
-	config.Log.Printf("Response body: %q", slotResponse)
+	config.Log.Infof("Response body: %q", slotResponse)
 	return slotResponse, nil
 }
 
@@ -45,31 +45,30 @@ func GetBlock(slotNumber uint) (model.GetBlockResponseBody, error) {
 	}
 	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
-		config.Log.Printf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
+		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 		return model.GetBlockResponseBody{}, err
 	}
-	config.Log.Printf("Got reponse from solana RPC, method: '%q', code: %d\n", GetBlockMethodName, res.StatusCode)
+	config.Log.Infof("Got reponse from solana RPC, method: '%q', code: %d", GetBlockMethodName, res.StatusCode)
 	var blockResponse model.GetBlockResponseBody
 	readResponseBody(res.Body, &blockResponse)
-	config.Log.Print("Response body: %q", blockResponse)
 	return blockResponse, nil
 }
 
 func readResponseBody[T any](closer io.ReadCloser, t T) {
 	body, err := io.ReadAll(closer)
 	if err != nil {
-		config.Log.Printf("Error reading response body: %q\n", err.Error())
+		config.Log.Errorf("Error reading response body: %q\n", err.Error())
 	}
 	err1 := json.Unmarshal(body, &t)
 	if err1 != nil {
-		config.Log.Printf("Error when convert body to json, error : %q\n", err1.Error())
+		config.Log.Errorf("Error when convert body to json, error : %q\n", err1.Error())
 	}
 }
 
 func toJsonIoReader(v any) io.Reader {
 	res, err := json.Marshal(v)
 	if err != nil {
-		config.Log.Printf("Error when convert value: %q to json, error: %q\n", v, err.Error())
+		config.Log.Errorf("Error when convert value: %q to json, error: %q\n", v, err.Error())
 	}
 	return bytes.NewBuffer(res)
 }

@@ -13,8 +13,8 @@ func main() {
 }
 
 func schedule() {
-	config.Log.Println("Start analyse task")
-	ticker := time.NewTicker(5 * time.Second)
+	config.Log.Info("Start analyse task")
+	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
 		service.Process()

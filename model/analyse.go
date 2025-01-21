@@ -32,6 +32,5 @@ type TransactionCoreInfo struct {
 
 
 // meta -> logMessages -> contains "Program log: Instruction: OpenDcaV2"
-// также должен бьть DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M в accountKeys
 // result -> transactions -> transaction -> message -> accountKeys (where signer = true)
 // result -> transactions -> transaction -> signatures <-------- подпись

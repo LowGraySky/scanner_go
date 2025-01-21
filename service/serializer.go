@@ -7,9 +7,9 @@ import (
 )
 
 type InstructionData struct {
-	CycleFrequency big.Int
-	InAmount big.Int
-	InAmountPerCycle
+	CycleFrequency string
+	InAmount string
+	InAmountPerCycle string
 }
 
 func SerializeInstructionData(data string) InstructionData {
@@ -31,9 +31,9 @@ func SerializeInstructionData(data string) InstructionData {
 	inAmountPerCycle := new(big.Int)
 	inAmountPerCycle.SetString(reversedInAmountPerCycleBytes, 16)
 	return InstructionData{
-		*cycleFrequency,
-		*inAmount,
-		*inAmountPerCycle
+		cycleFrequency.String(),
+		inAmount.String(),
+		inAmountPerCycle.String(),
 	}
 }
 

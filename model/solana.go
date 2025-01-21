@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type RpcCallWithoutParameters struct {
 	JsonRpc string `json:"jsonrpc"`
 	Id uint `json:"id"`
@@ -26,9 +28,17 @@ type GetSlotResponseBody struct {
 	Error Error `json:"error"`
 }
 
+func (r GetSlotResponseBody) String() string {
+	return fmt.Sprintf("Result: %d, Error: %q", r.Result, r.Error)
+}
+
+func (e Error) String() string {
+	return fmt.Sprintf("Code: %d, Message: %s", e.Code, e.Message)
+}
+
 type GetBlockResponseBody struct {
 	JsonRpc string `json:"jsonrpc"`
-	GetBlockResponseResultBody  `json:"result"`
+	Result GetBlockResponseResultBody `json:"result"`
 	Id uint `json:"id"`
 	Error Error `json:"error"`
 }
@@ -50,10 +60,9 @@ type Transaction struct {
 }
 
 type Meta struct {
-	PostBalances []int64 `json:"PostBalances"`
-	PreBalances []int64 `json:"PreBalances"`
+	LogMessages []string `json:"logMessages"`
 }
 
 type TransactionDetails struct {
-	Signatures []string `json:"Signatures"`
+	Signatures []string `json:"signatures"`
 }
