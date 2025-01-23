@@ -3,6 +3,7 @@ package service
 import (
     "sync"
     "web3.kz/solscan/config"
+	"web3.kz/solscan/model"
 )
 
 var (
@@ -17,7 +18,7 @@ func Process() {
 	}
 	slotNumber := slot.Result
 	if isAlreadyRead(slotNumber) {
-		config.Log.Infof("Slot with number %q already processed, SKIP", slotNumber)
+		config.Log.Infof("Slot with number %d already processed, SKIP", slotNumber)
 	} else {
 		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
 		block, _ := GetBlock(slotNumber)
@@ -26,7 +27,10 @@ func Process() {
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
-		Analyse(slotNumber, block.Result.Transactions)
+		channel := make(chan model.Transaction)
+		go Analyse(slotNumber, block.Result.Transactions, channel)
+		tx := <- channel
+		Serialize(tx)
 	}
 }
 

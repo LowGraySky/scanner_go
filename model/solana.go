@@ -36,21 +36,18 @@ func (e Error) String() string {
 	return fmt.Sprintf("Code: %d, Message: %s", e.Code, e.Message)
 }
 
+func (td TransactionDetails) String() string {
+	return fmt.Sprintf("Signatures: %s", td.Signatures)
+}
+
 type GetBlockResponseBody struct {
 	JsonRpc string `json:"jsonrpc"`
-	Result GetBlockResponseResultBody `json:"result"`
+	Result GetBlockResponseBodyResult `json:"result"`
 	Id uint `json:"id"`
 	Error Error `json:"error"`
 }
 
-type Error struct {
-	Code int `json:"code"`
-	Message string `json:"message"`
-}
-
-type GetBlockResponseResultBody struct {
-	BlockHash string `json:"blockhash"`
-	PreviousBlockhash string `json:"previousBlockhash"`
+type GetBlockResponseBodyResult struct {
 	Transactions []Transaction `json:"transactions"`
 }
 
@@ -61,8 +58,33 @@ type Transaction struct {
 
 type Meta struct {
 	LogMessages []string `json:"logMessages"`
+	InnerInstructions InnerInstructions `json:"innerInstructions"`
 }
 
 type TransactionDetails struct {
+	Message Message `json:"message"`
 	Signatures []string `json:"signatures"`
+}
+
+type AccountKey struct {
+	Pubkey string `json:"pubkey"`
+	Signer bool `json:"signer"`
+}
+
+type Message struct {
+	AccountKeys []AccountKey `json:"accountKeys"`
+}
+
+type InnerInstructions struct {
+	Instructions []Instruction `json:"instructions"`
+}
+
+type Instruction struct {
+	Data string `json:"data"`
+	ProgramId string `json:"programId"`
+}
+
+type Error struct {
+	Code int `json:"code"`
+	Message string `json:"message"`
 }

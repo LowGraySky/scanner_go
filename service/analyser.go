@@ -10,25 +10,24 @@ const (
 	openDcaV2Comment = "Program log: Instruction: OpenDcaV2"
 )
 
-func Analyse(slotNumber uint, transactions []model.Transaction) {
+func Analyse(
+	slotNumber uint,
+	transactions []model.Transaction,
+	channel chan<- model.Transaction) {
 	if len(transactions) == 0 {
 		config.Log.Infof("Skip analyse block with slot number %q, transaction count is 0!", slotNumber)
 		return
 	} else {
-		config.Log.Infof("Slot with number %q got transaction, start search", slotNumber)
+		config.Log.Infof("Slot with number %d got transaction, start search", slotNumber)
 		for _, tx := range transactions {
 			meta := tx.Meta
 			if isLogMesssagesExists(meta) && isOpenDcaV2(meta) {
 				fmt.Printf("Found DCA order, tx: %q", tx.TransactionDetails.Signatures)
-				//parseDcaTransaction(tx)
+				channel <- tx
 			}
 		}
 	}
 }
-
-//func parseDcaTransaction(transaction model.Transaction) {
-//
-//}
 
 func isLogMesssagesExists(meta model.Meta) bool {
 	return meta.LogMessages != nil
