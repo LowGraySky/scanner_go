@@ -39,9 +39,9 @@ func (hook *logHook) Levels() []logrus.Level {
 func (hook *logHook) Fire(entry *logrus.Entry) error {
 	switch entry.Level {
 	case logrus.ErrorLevel, logrus.FatalLevel, logrus.PanicLevel:
-		entry.Message = "\033[31m"
+		entry.Message = "31"
 	default:
-		entry.Message = "\033[32m"
+		entry.Message = "33"
 	}
 	return nil
 }

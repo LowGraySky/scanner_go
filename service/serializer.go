@@ -44,7 +44,7 @@ func Serialize(slotNumber uint, tx model.Transaction) DcaOrderCoreInformation {
 func findData(slotNumber uint, meta model.Meta) *string {
 	for _, inst := range meta.InnerInstructions {
 		if inst.ProgramId == dcaOpenV2ProgramId {
-			config.Log.Infof("Find data: %s in slot: %d", inst.Data, slotNumber)
+			config.Log.Infof("Find data: %s in slot: %d", *inst.Data, slotNumber)
 			return inst.Data
 		}
 	}

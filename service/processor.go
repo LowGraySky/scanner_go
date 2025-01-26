@@ -3,7 +3,7 @@ package service
 import (
     "sync"
     "web3.kz/solscan/config"
-	"web3.kz/solscan/model"
+	//"web3.kz/solscan/model"
 )
 
 var (
@@ -23,14 +23,15 @@ func Process() {
 		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
 		block, _ := GetBlock(slotNumber)
 		if block.Error.Code != 0 && block.Error.Message != "" {
-			config.Log.Infof("Error when get block information by slot with number: %d, error: %q", slotNumber, slot.Error)
+			config.Log.Error("Error when get block information by slot with number: %d, error: %q", slotNumber, slot.Error)
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
-		channel := make(chan model.Transaction)
-		go Analyse(slotNumber, block.Result.Transactions, channel)
-		tx := <- channel
-		Serialize(slotNumber, tx)
+	//	channel := make(chan model.Transaction)
+//		go Analyse(slotNumber, block.Result.Transactions, channel)
+//		tx := <- channel
+		Analyse(slotNumber, block.Result.Transactions)
+	//	Serialize(slotNumber, tx)
 	}
 }
 
