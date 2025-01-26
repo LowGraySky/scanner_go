@@ -12,23 +12,21 @@ const (
 
 func Analyse(
 	slotNumber uint,
-	transactions []model.Transaction,
-	//channel chan<- model.Transaction) {
-	) {
+	transactions []model.Transaction) []model.Transaction {
 	if len(transactions) == 0 {
 		config.Log.Infof("Skip analyse block with slot number %q, transaction count is 0!", slotNumber)
-		return
+		return make([]model.Transaction, 0)
 	} else {
+		var orders []model.Transaction
 		config.Log.Infof("Slot with number %d got transaction, start search", slotNumber)
 		for _, tx := range transactions {
 			meta := tx.Meta
 			if isLogMesssagesExists(meta) && isOpenDcaV2(meta) {
 				fmt.Printf("Found DCA order, tx: %q", tx.TransactionDetails.Signatures)
-//				channel <- tx
-				Serialize(slotNumber, tx)
+				orders = append(orders, tx)
 			}
 		}
-		config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
+		return orders
 	}
 }
 

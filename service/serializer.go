@@ -26,19 +26,25 @@ type Instruction struct {
 	ProgramId string `json:"programId"`
 }
 
-func Serialize(slotNumber uint, tx model.Transaction) DcaOrderCoreInformation {
-	var data string
-	d := findData(slotNumber, tx.Meta)
-	if d == nil {
-		config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
-		return DcaOrderCoreInformation{}
+func Serialize(slotNumber uint, orders []model.Transaction) []DcaOrderCoreInformation {
+	var dcaOrders []DcaOrderCoreInformation
+	for _, tx := range orders {
+		var data string
+		d := findData(slotNumber, tx.Meta)
+		if d == nil {
+			config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
+			return make([]DcaOrderCoreInformation, 0)
+		}
+
+		data = *d
+		instructions := serializeInstructionData(data)
+		order :=  DcaOrderCoreInformation{
+			Amount: getUiTokenAmount(tx),
+			CycleFrequency: instructions.CycleFrequency,
+		}
+		dcaOrders = append(dcaOrders, order)
 	}
-	data = *d
-	instructions := serializeInstructionData(data)
-	return DcaOrderCoreInformation{
-		Amount: getUiTokenAmount(tx),
-		CycleFrequency: instructions.CycleFrequency,
-	}
+	return dcaOrders
 }
 
 func findData(slotNumber uint, meta model.Meta) *string {

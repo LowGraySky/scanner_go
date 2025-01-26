@@ -3,7 +3,6 @@ package service
 import (
     "sync"
     "web3.kz/solscan/config"
-	//"web3.kz/solscan/model"
 )
 
 var (
@@ -27,11 +26,12 @@ func Process() {
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
-	//	channel := make(chan model.Transaction)
-//		go Analyse(slotNumber, block.Result.Transactions, channel)
-//		tx := <- channel
-		Analyse(slotNumber, block.Result.Transactions)
-	//	Serialize(slotNumber, tx)
+		orders := Analyse(slotNumber, block.Result.Transactions)
+		if len(orders) == 0 {
+			config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
+		} else {
+			Serialize(slotNumber, orders)
+		}
 	}
 }
 
