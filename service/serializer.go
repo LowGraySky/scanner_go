@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/hex"
-	"errors"
 	"github.com/mr-tron/base58"
 	"math/big"
 	"web3.kz/solscan/config"
@@ -18,25 +17,42 @@ type InstructionData struct {
 }
 
 type DcaOrderCoreInformation struct {
-	
+	Amount float32
+	CycleFrequency string
 }
 
-func Serialize(tx model.Transaction) DcaOrderCoreInformation {
-	data, err := findData(tx.Meta.InnerInstructions)
-	if err != nil {
-		config.Log.Errorf("")
+type Instruction struct {
+	Data string `json:"data"`
+	ProgramId string `json:"programId"`
+}
+
+func Serialize(slotNumber uint, tx model.Transaction) DcaOrderCoreInformation {
+	var data string
+	d := findData(slotNumber, tx.Meta)
+	if d == nil {
+		config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
+		return DcaOrderCoreInformation{}
 	}
-	instrucitonData := serializeInstructionData(data)
-
+	data = *d
+	instructions := serializeInstructionData(data)
+	return DcaOrderCoreInformation{
+		Amount: getUiTokenAmount(tx),
+		CycleFrequency: instructions.CycleFrequency,
+	}
 }
 
-func findData(instructions model.InnerInstructions) (string, error) {
-	for _, inst := range instructions.Instructions {
+func findData(slotNumber uint, meta model.Meta) *string {
+	for _, inst := range meta.InnerInstructions {
 		if inst.ProgramId == dcaOpenV2ProgramId {
-			return inst.Data, nil
+			config.Log.Infof("Find data: %s in slot: %d", inst.Data, slotNumber)
+			return inst.Data
 		}
 	}
-	return "", errors.New("")
+	return nil
+}
+
+func getUiTokenAmount(tx model.Transaction) float32 {
+	return tx.Meta.PreTokenBalances[0].UiTokenAmount.UiAmount
 }
 
 func serializeInstructionData(data string) InstructionData {

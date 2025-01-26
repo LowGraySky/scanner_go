@@ -25,8 +25,25 @@ func init() {
 	Log.SetFormatter(
 		&logrus.TextFormatter{
 			FullTimestamp: true,
+			ForceColors: true,
 		})
 	Log.SetLevel(logrus.TraceLevel)
+}
+
+type logHook struct{}
+
+func (hook *logHook) Levels() []logrus.Level {
+    return logrus.AllLevels
+}
+
+func (hook *logHook) Fire(entry *logrus.Entry) error {
+	switch entry.Level {
+	case logrus.ErrorLevel, logrus.FatalLevel, logrus.PanicLevel:
+		entry.Message = "\033[31m"
+	default:
+		entry.Message = "\033[32m"
+	}
+	return nil
 }
 
 func createLogFolderIfNotExists()  {

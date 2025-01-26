@@ -30,7 +30,7 @@ func Process() {
 		channel := make(chan model.Transaction)
 		go Analyse(slotNumber, block.Result.Transactions, channel)
 		tx := <- channel
-		Serialize(tx)
+		Serialize(slotNumber, tx)
 	}
 }
 
