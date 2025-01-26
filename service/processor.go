@@ -23,7 +23,7 @@ func Process() {
 		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
 		block, _ := GetBlock(slotNumber)
 		if block.Error.Code != 0 && block.Error.Message != "" {
-			config.Log.Error("Error when get block information by slot with number: %d, error: %q", slotNumber, slot.Error)
+			config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
