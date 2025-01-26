@@ -10,7 +10,9 @@ const (
 	openDcaV2Comment = "Program log: Instruction: OpenDcaV2"
 )
 
-func Analyse(
+type RealAnalyser struct {}
+
+func (a *RealAnalyser) Analyse(
 	slotNumber uint,
 	transactions []model.Transaction) []model.Transaction {
 	if len(transactions) == 0 {

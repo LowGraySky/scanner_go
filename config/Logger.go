@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const logFolderPath = "./../log/"
+const logFolderPath = "./log/"
 
 var Log *logrus.Logger
 

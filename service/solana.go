@@ -18,7 +18,9 @@ const (
 	GetBlockMethodName = "getBlock"
 )
 
-func GetSlot() (model.GetSlotResponseBody, error) {
+type RealSolanaCaller struct {}
+
+func (sc *RealSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
 	rpcCall := model.RpcCallWithoutParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,
@@ -36,7 +38,7 @@ func GetSlot() (model.GetSlotResponseBody, error) {
 	return slotResponse, nil
 }
 
-func GetBlock(slotNumber uint) (model.GetBlockResponseBody, error) {
+func (sc *RealSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBody, error) {
 	rpcCall := model.RpcCallWithParameters {
 		JsonRpc: JsonRpcValue,
 		Id: IdValue,

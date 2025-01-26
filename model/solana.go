@@ -59,12 +59,12 @@ type Transaction struct {
 type Meta struct {
 	PreTokenBalances  []PreTokenBalance `json:"preTokenBalances"`
 	LogMessages       []string          `json:"logMessages"`
-	InnerInstructions []Instruction          `json:"innerInstructions"`
+	InnerInstructions []Instruction     `json:"innerInstructions"`
 }
 
 type Instruction struct {
-	ProgramId string `json:"programId"`
-	Data *string `json:"data,omitempty"`
+	ProgramId string  `json:"programId"`
+	Data      *string `json:"data,omitempty"`
 }
 
 type PreTokenBalance struct {

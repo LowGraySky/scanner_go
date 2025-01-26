@@ -10,35 +10,20 @@ import (
 
 const dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 
-type InstructionData struct {
-	CycleFrequency string
-	InAmount string
-	InAmountPerCycle string
-}
+type RealSerializer struct {}
 
-type DcaOrderCoreInformation struct {
-	Amount float32
-	CycleFrequency string
-}
-
-type Instruction struct {
-	Data string `json:"data"`
-	ProgramId string `json:"programId"`
-}
-
-func Serialize(slotNumber uint, orders []model.Transaction) []DcaOrderCoreInformation {
-	var dcaOrders []DcaOrderCoreInformation
+func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.DcaOrderCoreInformation {
+	var dcaOrders []model.DcaOrderCoreInformation
 	for _, tx := range orders {
 		var data string
 		d := findData(slotNumber, tx.Meta)
 		if d == nil {
 			config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
-			return make([]DcaOrderCoreInformation, 0)
+			return make([]model.DcaOrderCoreInformation, 0)
 		}
-
 		data = *d
 		instructions := serializeInstructionData(data)
-		order :=  DcaOrderCoreInformation{
+		order := model.DcaOrderCoreInformation{
 			Amount: getUiTokenAmount(tx),
 			CycleFrequency: instructions.CycleFrequency,
 		}
@@ -61,7 +46,7 @@ func getUiTokenAmount(tx model.Transaction) float32 {
 	return tx.Meta.PreTokenBalances[0].UiTokenAmount.UiAmount
 }
 
-func serializeInstructionData(data string) InstructionData {
+func serializeInstructionData(data string) model.InstructionData {
 	decodedData, _ := base58.Decode(data)
 	hexString := hex.EncodeToString(decodedData)
 
@@ -79,13 +64,12 @@ func serializeInstructionData(data string) InstructionData {
 	inAmount.SetString(reversedInAmountBytes, 16)
 	inAmountPerCycle := new(big.Int)
 	inAmountPerCycle.SetString(reversedInAmountPerCycleBytes, 16)
-	return InstructionData{
-		cycleFrequency.String(),
-		inAmount.String(),
-		inAmountPerCycle.String(),
+	return model.InstructionData{
+		CycleFrequency:   cycleFrequency.String(),
+		InAmount:         inAmount.String(),
+		InAmountPerCycle: inAmountPerCycle.String(),
 	}
 }
-
 
 func reverseHexBytes(hexStr string) string {
 	n := len(hexStr)

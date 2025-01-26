@@ -9,8 +9,14 @@ var (
 	parsedSlotMap sync.Map
 )
 
-func Process() {
-	slot, _ := GetSlot()
+type RealProcessor struct {
+	Analyser Analyser
+	Serialiser Serialiser
+	SolanaCaller SolanaCaller
+}
+
+func (r *RealProcessor) Process() {
+	slot, _ := r.SolanaCaller.GetSlot()
 	if slot.Error.Code != 0 && slot.Error.Message != "" {
 		config.Log.Infof("Error when get slot number, error: %q", slot.Error)
 		return
@@ -20,17 +26,17 @@ func Process() {
 		config.Log.Infof("Slot with number %d already processed, SKIP", slotNumber)
 	} else {
 		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
-		block, _ := GetBlock(slotNumber)
+		block, _ := r.SolanaCaller.GetBlock(slotNumber)
 		if block.Error.Code != 0 && block.Error.Message != "" {
 			config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
 			return
 		}
 		parsedSlotMap.Store(slotNumber, nil)
-		orders := Analyse(slotNumber, block.Result.Transactions)
+		orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
 		if len(orders) == 0 {
 			config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
 		} else {
-			Serialize(slotNumber, orders)
+			r.Serialiser.Serialize(slotNumber, orders)
 		}
 	}
 }
