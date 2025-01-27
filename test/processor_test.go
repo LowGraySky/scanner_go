@@ -3,15 +3,24 @@ package test
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/stretchr/testify/mock"
 	"io"
 	"log"
 	"os"
 	"testing"
 	"web3.kz/solscan/model"
+	"web3.kz/solscan/service"
 )
 
-func ProcessTest(t *testing.T) {
-	slot := model.GetSlotResponseBody{
+func TestProcess(t *testing.T) {
+	mockCaller := new(MockSolanaCaller)
+	mockAnalyser := new(MockAnalyser)
+	processor := service.RealProcessor{
+		Analyser:     mockAnalyser,
+		Serialiser:   &service.RealSerializer{},
+		SolanaCaller: mockCaller,
+	}
+	getSlotResponse := model.GetSlotResponseBody{
 		JsonRpc: "2.0",
 		Result:  2,
 		Id:      1,
@@ -20,16 +29,44 @@ func ProcessTest(t *testing.T) {
 			Message: "",
 		},
 	}
+	getBlockResponseBody := readBlockResponseFromFile()
+	mockCaller.On("GetSlot").Return(getSlotResponse, nil)
+	mockCaller.On("GetBlock", getSlotResponse.Result).Return(getBlockResponseBody, nil)
+	mockAnalyser.On("Analyse", getSlotResponse.Result, mock.Anything).Return(make([]model.Transaction, 0))
 
-	block := readBlockResponseFromFile()
+	processor.Process()
 
-	if result != expect {
-		t.Errorf("ERROR 1 <-----")
+	expectation := mockCaller.AssertExpectations(t)
+
+	if !expectation {
+		t.Errorf("")
 	}
 }
 
+type MockAnalyser struct {
+	mock.Mock
+}
+
+func (ma *MockAnalyser) Analyse(slotNumber uint, transactions []model.Transaction) []model.Transaction {
+	args := ma.Called(slotNumber, transactions)
+	return args.Get(0).([]model.Transaction)
+}
+
+type MockSolanaCaller struct {
+	mock.Mock
+}
+
+func (m *MockSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
+	args := m.Called()
+	return args.Get(0).(model.GetSlotResponseBody), args.Error(1)
+}
+func (m *MockSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBody, error) {
+	args := m.Called(slotNumber)
+	return args.Get(0).(model.GetBlockResponseBody), args.Error(1)
+}
+
 func readBlockResponseFromFile() model.GetBlockResponseBody {
-	file, err := os.Open("./test/files/procees_test.txt")
+	file, err := os.Open("files/process_test.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
