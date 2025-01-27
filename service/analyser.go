@@ -28,7 +28,11 @@ func (a *RealAnalyser) Analyse(
 				orders = append(orders, tx)
 			}
 		}
-		return orders
+		if orders == nil {
+			return make([]model.Transaction, 0)
+		} else {
+			return orders
+		}
 	}
 }
 

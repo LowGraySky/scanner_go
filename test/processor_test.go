@@ -59,4 +59,3 @@ func (m *MockSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBody
 	args := m.Called(slotNumber)
 	return args.Get(0).(model.GetBlockResponseBody), args.Error(1)
 }
-
