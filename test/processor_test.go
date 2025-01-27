@@ -1,12 +1,7 @@
 package test
 
 import (
-	"bufio"
-	"encoding/json"
 	"github.com/stretchr/testify/mock"
-	"io"
-	"log"
-	"os"
 	"testing"
 	"web3.kz/solscan/model"
 	"web3.kz/solscan/service"
@@ -29,7 +24,7 @@ func TestProcess(t *testing.T) {
 			Message: "",
 		},
 	}
-	getBlockResponseBody := readBlockResponseFromFile()
+	getBlockResponseBody := ReadBlockResponseFromFile()
 	mockCaller.On("GetSlot").Return(getSlotResponse, nil)
 	mockCaller.On("GetBlock", getSlotResponse.Result).Return(getBlockResponseBody, nil)
 	mockAnalyser.On("Analyse", getSlotResponse.Result, mock.Anything).Return(make([]model.Transaction, 0))
@@ -65,26 +60,3 @@ func (m *MockSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBody
 	return args.Get(0).(model.GetBlockResponseBody), args.Error(1)
 }
 
-func readBlockResponseFromFile() model.GetBlockResponseBody {
-	file, err := os.Open("files/process_test.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}(file)
-	reader := bufio.NewReader(file)
-	body, err := io.ReadAll(reader)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var block model.GetBlockResponseBody
-	err1 := json.Unmarshal(body, &block)
-	if err1 != nil {
-		log.Fatal(err)
-	}
-	return block
-}
