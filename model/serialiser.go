@@ -8,5 +8,6 @@ type InstructionData struct {
 
 type DcaOrderCoreInformation struct {
 	Amount float32
+	AmountPerCycle string
 	CycleFrequency string
 }

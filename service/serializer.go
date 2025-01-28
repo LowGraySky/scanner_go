@@ -26,6 +26,7 @@ func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) 
 		order := model.DcaOrderCoreInformation{
 			Amount: getUiTokenAmount(tx),
 			CycleFrequency: instructions.CycleFrequency,
+			AmountPerCycle: instructions.InAmountPerCycle,
 		}
 		dcaOrders = append(dcaOrders, order)
 	}
