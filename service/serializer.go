@@ -12,23 +12,18 @@ const dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 
 type RealSerializer struct {}
 
-func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.DcaOrderCoreInformation {
-	var dcaOrders []model.DcaOrderCoreInformation
+func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.InstructionData {
+	var dcaOrders []model.InstructionData
 	for _, tx := range orders {
 		var data string
 		d := findData(slotNumber, tx.Meta)
 		if d == nil {
 			config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
-			return make([]model.DcaOrderCoreInformation, 0)
+			return make([]model.InstructionData, 0)
 		}
 		data = *d
 		instructions := serializeInstructionData(data)
-		order := model.DcaOrderCoreInformation{
-			Amount: getUiTokenAmount(tx),
-			CycleFrequency: instructions.CycleFrequency,
-			AmountPerCycle: instructions.InAmountPerCycle,
-		}
-		dcaOrders = append(dcaOrders, order)
+		dcaOrders = append(dcaOrders, instructions)
 	}
 	return dcaOrders
 }
@@ -41,10 +36,6 @@ func findData(slotNumber uint, meta model.Meta) *string {
 		}
 	}
 	return nil
-}
-
-func getUiTokenAmount(tx model.Transaction) float32 {
-	return tx.Meta.PreTokenBalances[0].UiTokenAmount.UiAmount
 }
 
 func serializeInstructionData(data string) model.InstructionData {

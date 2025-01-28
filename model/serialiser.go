@@ -5,9 +5,3 @@ type InstructionData struct {
 	InAmount string
 	InAmountPerCycle string
 }
-
-type DcaOrderCoreInformation struct {
-	Amount float32
-	AmountPerCycle string
-	CycleFrequency string
-}

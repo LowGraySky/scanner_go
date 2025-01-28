@@ -57,7 +57,6 @@ type Transaction struct {
 }
 
 type Meta struct {
-	PreTokenBalances  []PreTokenBalance `json:"preTokenBalances"`
 	LogMessages       []string          `json:"logMessages"`
 	InnerInstructions []Instruction     `json:"innerInstructions"`
 }
