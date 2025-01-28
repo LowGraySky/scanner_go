@@ -1,5 +1,0 @@
-[36mINFO[0m[2025-01-28T23:31:29+05:00] Slot with number 1 got transaction, start search 
-[36mINFO[0m[2025-01-28T23:31:29+05:00] Slot with number 1 got transaction, start search 
-[36mINFO[0m[2025-01-28T23:31:29+05:00] Begin analyse slot with number: 2            
-[36mINFO[0m[2025-01-28T23:31:29+05:00] Slot with number 2 not exists DCA orders!    
-[31mERRO[0m[2025-01-28T23:31:29+05:00] Cant find information abount DCA order data in slot: 1 
