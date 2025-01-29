@@ -57,22 +57,7 @@ type Transaction struct {
 }
 
 type Meta struct {
-	LogMessages       []string          `json:"logMessages"`
-	InnerInstructions []Instruction     `json:"innerInstructions"`
-}
-
-type Instruction struct {
-	ProgramId string  `json:"programId"`
-	Data      *string `json:"data,omitempty"`
-}
-
-type PreTokenBalance struct {
-	UiTokenAmount UiTokenAmount `json:"uiTokenAmount"`
-}
-
-type UiTokenAmount struct {
-	UiAmount float32 `json:"uiAmount"`
-	Decimals uint    `json:"decimals"`
+	LogMessages []string `json:"logMessages"`
 }
 
 type TransactionDetails struct {
@@ -80,13 +65,19 @@ type TransactionDetails struct {
 	Signatures []string `json:"signatures"`
 }
 
+type Message struct {
+	AccountKeys  []AccountKey  `json:"accountKeys"`
+	Instructions []Instruction `json:"instructions"`
+}
+
+type Instruction struct {
+	ProgramId string  `json:"programId"`
+	Data      *string `json:"data,omitempty"`
+}
+
 type AccountKey struct {
 	Pubkey string `json:"pubkey"`
 	Signer bool   `json:"signer"`
-}
-
-type Message struct {
-	AccountKeys []AccountKey `json:"accountKeys"`
 }
 
 type Error struct {

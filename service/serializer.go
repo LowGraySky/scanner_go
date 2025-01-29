@@ -10,13 +10,13 @@ import (
 
 const dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 
-type RealSerializer struct {}
+type RealSerializer struct{}
 
 func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.InstructionData {
 	var dcaOrders []model.InstructionData
 	for _, tx := range orders {
 		var data string
-		d := findData(slotNumber, tx.Meta)
+		d := findData(slotNumber, tx.TransactionDetails)
 		if d == nil {
 			config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
 			return make([]model.InstructionData, 0)
@@ -28,8 +28,8 @@ func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) 
 	return dcaOrders
 }
 
-func findData(slotNumber uint, meta model.Meta) *string {
-	for _, inst := range meta.InnerInstructions {
+func findData(slotNumber uint, txDetails model.TransactionDetails) *string {
+	for _, inst := range txDetails.Message.Instructions {
 		if inst.ProgramId == dcaOpenV2ProgramId {
 			config.Log.Infof("Find data: %s in slot: %d", *inst.Data, slotNumber)
 			return inst.Data

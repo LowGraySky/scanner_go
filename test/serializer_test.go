@@ -16,12 +16,11 @@ func TestSerializer(t *testing.T) {
 	if !c {
 		t.Error("")
 	}
-
-	ame := assert.Equal(t, actual[0].Amount, "8272121.570535")
+	ame := assert.Equal(t, actual[0].InAmount, "8272121570535")
 	if !ame {
 		t.Error("")
 	}
-	ampe := assert.Equal(t, actual[0].AmountPerCycle, "330884.86282")
+	ampe := assert.Equal(t, actual[0].InAmountPerCycle, "33088486282")
 	if !ampe {
 		t.Error("")
 	}

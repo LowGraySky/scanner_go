@@ -11,7 +11,7 @@ type Analyser interface {
 }
 
 type Serialiser interface {
-	Serialize(slotNumber uint, orders []model.Transaction) []model.DcaOrderCoreInformation
+	Serialize(slotNumber uint, orders []model.Transaction) []model.InstructionData
 }
 
 type SolanaCaller interface {
