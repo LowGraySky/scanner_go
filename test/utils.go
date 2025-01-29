@@ -10,7 +10,7 @@ import (
 )
 
 func ReadBlockResponseFromFile() model.GetBlockResponseBody {
-	file, err := os.Open("files/process_test.txt")
+	file, err := os.Open("files/test_data.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
