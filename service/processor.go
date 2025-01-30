@@ -49,29 +49,25 @@ func isAlreadyRead(number uint) bool {
 	return exists
 }
 
-func constructTelegramMessage(txData model.TxData, instrData model.InstructionData) model.TelegramDCAOrderMessage {
+func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
 	return model.TelegramDCAOrderMessage{
-		Eta: eta(instrData),
-		PotencialPriceChange: calculatePriceChange(instrData),
-		TokenCA: ,
-		UserAddress: ,
-		InAmount: instrData.InAmount,
-		PeriodStart: "",
-		PeriodEnd: ""
+		Eta:                  eta(transactionData.InstructionData),
+		PotencialPriceChange: calculatePriceChange(transactionData.InstructionData),
+		TokenCA:              transactionData.Token,
+		UserAddress:          transactionData.User,
+		InAmount:             transactionData.InstructionData.InAmount,
+		PeriodStart:          "",
+		PeriodEnd:            "",
 	}
 }
 
 func eta(data model.InstructionData) uint {
 	v1, _ := strconv.Atoi(data.InAmount)
 	v2, _ := strconv.Atoi(data.InAmountPerCycle)
-	return uint(v1/v2)
+	return uint(v1 / v2)
 }
 
 func calculatePriceChange(instruction model.InstructionData) float32 {
 	// TODO <--
 	return 1.0
 }
-
-
-
-
