@@ -5,3 +5,9 @@ type InstructionData struct {
 	InAmount string
 	InAmountPerCycle string
 }
+
+type TransactionData struct {
+	Token string
+	User string
+	InstructionData InstructionData
+}

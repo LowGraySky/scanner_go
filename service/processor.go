@@ -1,8 +1,10 @@
 package service
 
 import (
-    "sync"
-    "web3.kz/solscan/config"
+	"strconv"
+	"sync"
+	"web3.kz/solscan/config"
+	"web3.kz/solscan/model"
 )
 
 var (
@@ -10,9 +12,10 @@ var (
 )
 
 type RealProcessor struct {
-	Analyser Analyser
-	Serialiser Serialiser
-	SolanaCaller SolanaCaller
+	Analyser       Analyser
+	Serialiser     Serialiser
+	SolanaCaller   SolanaCaller
+	TelegramCaller TelegramCaller
 }
 
 func (r *RealProcessor) Process() {
@@ -45,3 +48,30 @@ func isAlreadyRead(number uint) bool {
 	_, exists := parsedSlotMap.Load(number)
 	return exists
 }
+
+func constructTelegramMessage(txData model.TxData, instrData model.InstructionData) model.TelegramDCAOrderMessage {
+	return model.TelegramDCAOrderMessage{
+		Eta: eta(instrData),
+		PotencialPriceChange: calculatePriceChange(instrData),
+		TokenCA: ,
+		UserAddress: ,
+		InAmount: instrData.InAmount,
+		PeriodStart: "",
+		PeriodEnd: ""
+	}
+}
+
+func eta(data model.InstructionData) uint {
+	v1, _ := strconv.Atoi(data.InAmount)
+	v2, _ := strconv.Atoi(data.InAmountPerCycle)
+	return uint(v1/v2)
+}
+
+func calculatePriceChange(instruction model.InstructionData) float32 {
+	// TODO <--
+	return 1.0
+}
+
+
+
+

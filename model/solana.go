@@ -61,23 +61,17 @@ type Meta struct {
 }
 
 type TransactionDetails struct {
-	Message    Message  `json:"message"`
+	Message struct {
+		AccountKeys []struct {
+			Pubkey string `json:"pubkey"`
+			Signer bool   `json:"signer"`
+		} `json:"accountKeys"`
+		Instructions []struct {
+			ProgramId string  `json:"programId"`
+			Data      *string `json:"data,omitempty"`
+		} `json:"instructions"`
+	} `json:"message"`
 	Signatures []string `json:"signatures"`
-}
-
-type Message struct {
-	AccountKeys  []AccountKey  `json:"accountKeys"`
-	Instructions []Instruction `json:"instructions"`
-}
-
-type Instruction struct {
-	ProgramId string  `json:"programId"`
-	Data      *string `json:"data,omitempty"`
-}
-
-type AccountKey struct {
-	Pubkey string `json:"pubkey"`
-	Signer bool   `json:"signer"`
 }
 
 type Error struct {

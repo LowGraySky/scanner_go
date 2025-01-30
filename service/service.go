@@ -11,10 +11,14 @@ type Analyser interface {
 }
 
 type Serialiser interface {
-	Serialize(slotNumber uint, orders []model.Transaction) []model.InstructionData
+	Serialize(slotNumber uint, orders []model.Transaction) []model.TransactionData
 }
 
 type SolanaCaller interface {
 	GetSlot() (model.GetSlotResponseBody, error)
 	GetBlock(slotNumber uint) (model.GetBlockResponseBody, error)
+}
+
+type TelegramCaller interface {
+	SendMessage(message string)
 }

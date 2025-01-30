@@ -12,20 +12,29 @@ const dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 
 type RealSerializer struct{}
 
-func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.InstructionData {
-	var dcaOrders []model.InstructionData
+func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.TransactionData {
+	var dcaOrders []model.TransactionData
 	for _, tx := range orders {
 		var data string
 		d := findData(slotNumber, tx.TransactionDetails)
 		if d == nil {
 			config.Log.Errorf("Cant find information abount DCA order data in slot: %d", slotNumber)
-			return make([]model.InstructionData, 0)
+			return make([]model.TransactionData, 0)
 		}
 		data = *d
 		instructions := serializeInstructionData(data)
-		dcaOrders = append(dcaOrders, instructions)
+		tranasctionData := createTransactionAditionalData(tx, instructions)
+		dcaOrders = append(dcaOrders, tranasctionData)
 	}
 	return dcaOrders
+}
+
+func createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) model.TransactionData {
+	return model.TransactionData{
+		Token: "", // TODO <-- 
+		User: findUserCA(tx),
+		InstructionData: inst,
+	}
 }
 
 func findData(slotNumber uint, txDetails model.TransactionDetails) *string {
@@ -36,6 +45,15 @@ func findData(slotNumber uint, txDetails model.TransactionDetails) *string {
 		}
 	}
 	return nil
+}
+
+func findUserCA(tx model.Transaction) string {
+	for _, acc := range tx.TransactionDetails.Message.AccountKeys {
+		if acc.Signer == true {
+			return acc.Pubkey
+		}
+	}
+	return ""
 }
 
 func serializeInstructionData(data string) model.InstructionData {

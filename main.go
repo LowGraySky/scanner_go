@@ -27,5 +27,6 @@ func createProcessor() service.Processor {
 		Analyser: &service.RealAnalyser{},
 		Serialiser: &service.RealSerializer{},
 		SolanaCaller: &service.RealSolanaCaller{},
+		TelegramCaller: &service.RealTelegramCaller{},
 	}
 }

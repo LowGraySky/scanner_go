@@ -1,14 +1,14 @@
 package model
 
-//type TransactionTelegramResult struct {
-//	Capitalisation uint
-//	Liquidity uint
-//	Eta string
-//	PotencailPriceChange string
-//
-//
-//	Ca string `json:"CA"`
-//}
+type TelegramDCAOrderMessage struct {
+	Eta uint `json:"eta"`
+	PotencialPriceChange float32 `json:"potencial_price_change"`
+	TokenCA string `json:"token_ca"`
+	UserAddress string `json:"user_address"`
+	InAmount string `json:"in_amount"`
+	PeriodStart string `json:"period_start"`
+	PeriodEnd string `json:"period_end"`
+}
 
 //MCAP: $17.91M
 //Liquidity: $597.17K
