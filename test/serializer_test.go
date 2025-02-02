@@ -13,9 +13,9 @@ func TestSerializer(t *testing.T) {
 	actual := serializer.Serialize(1, transactions)
 
 	c := assert.Equal(t, len(actual), 1)
-	ame := assert.Equal(t, actual[0].InAmount, "8272121570535")
-	ampe := assert.Equal(t, actual[0].InAmountPerCycle, "33088486282")
-	cfe := assert.Equal(t, actual[0].CycleFrequency, "60")
+	ame := assert.Equal(t, actual[0].InstructionData.InAmount, "8272121570535")
+	ampe := assert.Equal(t, actual[0].InstructionData.InAmountPerCycle, "33088486282")
+	cfe := assert.Equal(t, actual[0].InstructionData.CycleFrequency, "60")
 	res := c && ame && ampe && cfe
 	if !res {
 		t.Error("")
