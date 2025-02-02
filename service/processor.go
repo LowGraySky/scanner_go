@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/PaulSonOfLars/gotgbot/v2"
 	"strconv"
 	"sync"
 	"web3.kz/solscan/config"
@@ -18,7 +19,7 @@ type RealProcessor struct {
 	TelegramCaller TelegramCaller
 }
 
-func (r *RealProcessor) Process() {
+func (r *RealProcessor) Process(bot gotgbot.Bot) {
 	slot, _ := r.SolanaCaller.GetSlot()
 	if slot.Error.Code != 0 && slot.Error.Message != "" {
 		config.Log.Infof("Error when get slot number, error: %q", slot.Error)
@@ -39,7 +40,11 @@ func (r *RealProcessor) Process() {
 		if len(orders) == 0 {
 			config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
 		} else {
-			r.Serialiser.Serialize(slotNumber, orders)
+			txData := r.Serialiser.Serialize(slotNumber, orders)
+			for _, d := range txData {
+				msg := constructTelegramMessage(d)
+				r.TelegramCaller.SendMessage(bot, msg.String())
+			}
 		}
 	}
 }
@@ -51,6 +56,8 @@ func isAlreadyRead(number uint) bool {
 
 func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
 	return model.TelegramDCAOrderMessage{
+		Symbol:               transactionData.TokenSymbol,
+		Operation:            transactionData.Operation.String(),
 		Eta:                  eta(transactionData.InstructionData),
 		PotencialPriceChange: calculatePriceChange(transactionData.InstructionData),
 		TokenCA:              transactionData.Token,

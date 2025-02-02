@@ -1,9 +1,12 @@
 package service
 
-import "web3.kz/solscan/model"
+import (
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"web3.kz/solscan/model"
+)
 
 type Processor interface {
-	Process()
+	Process(bot gotgbot.Bot)
 }
 
 type Analyser interface {
@@ -20,5 +23,10 @@ type SolanaCaller interface {
 }
 
 type TelegramCaller interface {
-	SendMessage(message string)
+	StartBot() (*gotgbot.Bot, error)
+	SendMessage(bot gotgbot.Bot, message string)
+}
+
+type JupiterCaller interface {
+	GetToken(address string) (model.TokenInfo, error)
 }

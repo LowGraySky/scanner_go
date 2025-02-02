@@ -10,7 +10,7 @@ const (
 	openDcaV2Comment = "Program log: Instruction: OpenDcaV2"
 )
 
-type RealAnalyser struct {}
+type RealAnalyser struct{}
 
 func (a *RealAnalyser) Analyse(
 	slotNumber uint,
@@ -48,4 +48,3 @@ func isOpenDcaV2(meta model.Meta) bool {
 	}
 	return false
 }
-

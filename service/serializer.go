@@ -8,9 +8,14 @@ import (
 	"web3.kz/solscan/model"
 )
 
-const dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
+const (
+	tokenAddressProgramName = "spl-associated-token-account"
+	dcaOpenV2ProgramId      = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
+)
 
-type RealSerializer struct{}
+type RealSerializer struct {
+	JupiterCaller JupiterCaller
+}
 
 func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) []model.TransactionData {
 	var dcaOrders []model.TransactionData
@@ -23,18 +28,43 @@ func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) 
 		}
 		data = *d
 		instructions := serializeInstructionData(data)
-		tranasctionData := createTransactionAditionalData(tx, instructions)
+		tranasctionData := s.createTransactionAditionalData(tx, instructions)
 		dcaOrders = append(dcaOrders, tranasctionData)
 	}
 	return dcaOrders
 }
 
-func createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) model.TransactionData {
+func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) model.TransactionData {
+	token, operation := defineTokenAndOrderOperation(tx)
+	tokenInfo, err := s.JupiterCaller.GetToken(token)
+	if err != nil {
+		config.Log.Errorf("Error when fetch token data by address: %s, error: %q", token, err.Error())
+		return model.TransactionData{}
+	}
 	return model.TransactionData{
-		Token: "", // TODO <-- 
-		User: findUserCA(tx),
+		Token:           token,
+		TokenSymbol:     tokenInfo.Symbol,
+		User:            findUserCA(tx),
+		Operation:       operation,
 		InstructionData: inst,
 	}
+}
+
+func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation) {
+	tokens := collectTokenAddress(tx)
+	return tokens[1], model.BUY
+}
+
+func collectTokenAddress(tx model.Transaction) []string {
+	tokens := make([]string, 2)
+	for _, inst := range tx.Meta.InnerInstructions {
+		for _, i := range inst.Instructions {
+			if i.Program == tokenAddressProgramName {
+				tokens = append(tokens, i.Parsed.Info.Mint)
+			}
+		}
+	}
+	return tokens
 }
 
 func findData(slotNumber uint, txDetails model.TransactionDetails) *string {

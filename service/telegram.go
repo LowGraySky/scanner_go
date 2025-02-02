@@ -6,21 +6,20 @@ import (
 )
 
 const (
-	chatId int64 = 8135757102
-    telegramBotToken = "7460083410:AAF08myRfMh53DMJkefZvNhOQpddcJxPO5Q"
+	chatId           int64 = 8135757102
+	telegramBotToken       = "7460083410:AAF08myRfMh53DMJkefZvNhOQpddcJxPO5Q"
 )
 
-type RealTelegramCaller struct {}
+type RealTelegramCaller struct{}
 
-var bot *gotgbot.Bot
-
-func init() {
-	bot, _ = gotgbot.NewBot(telegramBotToken, nil)
+func (tc *RealTelegramCaller) StartBot() (*gotgbot.Bot, error) {
+	return gotgbot.NewBot(telegramBotToken, nil)
 }
 
-func (tc *RealTelegramCaller) SendMessage(message string) {
+func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) {
 	_, err := bot.SendMessage(chatId, message, nil)
 	if err != nil {
-		config.Log.Error("Message hasn't delivered!")
+		config.Log.Errorf("Message %s hasn't delivered!", message)
 	}
+	config.Log.Infof("Succuess send telegram message: %s", message)
 }
