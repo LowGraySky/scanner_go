@@ -1,0 +1,293 @@
+[36mINFO[0m[2025-02-02T22:54:00+05:00] Start analyse task                           
+[36mINFO[0m[2025-02-02T22:54:02+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:02+05:00] Response body: "Result: 318037519, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:02+05:00] Begin analyse slot with number: 318037519    
+[36mINFO[0m[2025-02-02T22:54:03+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:04+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Slot with number 318037519 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Slot with number 318037519 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Response body: "Result: 318037522, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Begin analyse slot with number: 318037522    
+[36mINFO[0m[2025-02-02T22:54:04+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:05+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:05+05:00] Slot with number 318037522 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:05+05:00] Slot with number 318037522 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:06+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:06+05:00] Response body: "Result: 318037527, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:06+05:00] Begin analyse slot with number: 318037527    
+[36mINFO[0m[2025-02-02T22:54:06+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:07+05:00] Slot with number 318037527 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:07+05:00] Slot with number 318037527 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:08+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:08+05:00] Response body: "Result: 318037532, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:08+05:00] Begin analyse slot with number: 318037532    
+[36mINFO[0m[2025-02-02T22:54:08+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:09+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:09+05:00] Slot with number 318037532 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:09+05:00] Slot with number 318037532 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:10+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:10+05:00] Response body: "Result: 318037537, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:10+05:00] Begin analyse slot with number: 318037537    
+[36mINFO[0m[2025-02-02T22:54:10+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:11+05:00] Slot with number 318037537 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:11+05:00] Slot with number 318037537 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:12+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:12+05:00] Response body: "Result: 318037542, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:12+05:00] Begin analyse slot with number: 318037542    
+[36mINFO[0m[2025-02-02T22:54:12+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 429 
+[31mERRO[0m[2025-02-02T22:54:12+05:00] Error when get block information by slot with number: 318037542, error: Code: 429, Message: Too many requests for a specific RPC call 
+[36mINFO[0m[2025-02-02T22:54:14+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:14+05:00] Response body: "Result: 318037546, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:14+05:00] Begin analyse slot with number: 318037546    
+[36mINFO[0m[2025-02-02T22:54:14+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 429 
+[31mERRO[0m[2025-02-02T22:54:14+05:00] Error when get block information by slot with number: 318037546, error: Code: 429, Message: Too many requests for a specific RPC call 
+[36mINFO[0m[2025-02-02T22:54:16+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:16+05:00] Response body: "Result: 318037553, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:16+05:00] Begin analyse slot with number: 318037553    
+[36mINFO[0m[2025-02-02T22:54:16+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:17+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:17+05:00] Slot with number 318037553 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:17+05:00] Slot with number 318037553 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:18+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:18+05:00] Response body: "Result: 318037558, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:18+05:00] Begin analyse slot with number: 318037558    
+[36mINFO[0m[2025-02-02T22:54:18+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:19+05:00] Slot with number 318037558 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:19+05:00] Slot with number 318037558 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:20+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:20+05:00] Response body: "Result: 318037559, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:20+05:00] Begin analyse slot with number: 318037559    
+[36mINFO[0m[2025-02-02T22:54:20+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:21+05:00] Slot with number 318037559 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:21+05:00] Slot with number 318037559 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:22+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:22+05:00] Response body: "Result: 318037562, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:22+05:00] Begin analyse slot with number: 318037562    
+[36mINFO[0m[2025-02-02T22:54:22+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:23+05:00] Slot with number 318037562 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:23+05:00] Slot with number 318037562 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:24+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:24+05:00] Response body: "Result: 318037564, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:24+05:00] Begin analyse slot with number: 318037564    
+[36mINFO[0m[2025-02-02T22:54:24+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:25+05:00] Slot with number 318037564 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:25+05:00] Slot with number 318037564 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:26+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:26+05:00] Response body: "Result: 318037568, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:26+05:00] Begin analyse slot with number: 318037568    
+[36mINFO[0m[2025-02-02T22:54:26+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:27+05:00] Slot with number 318037568 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:27+05:00] Slot with number 318037568 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:28+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:28+05:00] Response body: "Result: 318037573, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:28+05:00] Begin analyse slot with number: 318037573    
+[36mINFO[0m[2025-02-02T22:54:28+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:29+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:29+05:00] Slot with number 318037573 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:29+05:00] Slot with number 318037573 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:30+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:30+05:00] Response body: "Result: 318037578, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:30+05:00] Begin analyse slot with number: 318037578    
+[36mINFO[0m[2025-02-02T22:54:30+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:31+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:31+05:00] Slot with number 318037578 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:31+05:00] Slot with number 318037578 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:32+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:32+05:00] Response body: "Result: 318037583, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:32+05:00] Begin analyse slot with number: 318037583    
+[36mINFO[0m[2025-02-02T22:54:32+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:33+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:33+05:00] Slot with number 318037583 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:33+05:00] Slot with number 318037583 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:34+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:34+05:00] Response body: "Result: 318037588, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:34+05:00] Begin analyse slot with number: 318037588    
+[36mINFO[0m[2025-02-02T22:54:34+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:35+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:35+05:00] Slot with number 318037588 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:35+05:00] Slot with number 318037588 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:36+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:36+05:00] Response body: "Result: 318037593, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:36+05:00] Begin analyse slot with number: 318037593    
+[36mINFO[0m[2025-02-02T22:54:36+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:37+05:00] Slot with number 318037593 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:37+05:00] Slot with number 318037593 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:38+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:38+05:00] Response body: "Result: 318037604, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:38+05:00] Begin analyse slot with number: 318037604    
+[36mINFO[0m[2025-02-02T22:54:38+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:39+05:00] Slot with number 318037604 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:39+05:00] Slot with number 318037604 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:40+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:40+05:00] Response body: "Result: 318037609, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:40+05:00] Begin analyse slot with number: 318037609    
+[36mINFO[0m[2025-02-02T22:54:40+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:41+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:41+05:00] Slot with number 318037609 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:41+05:00] Slot with number 318037609 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:42+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:42+05:00] Response body: "Result: 318037614, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:42+05:00] Begin analyse slot with number: 318037614    
+[36mINFO[0m[2025-02-02T22:54:42+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:43+05:00] Slot with number 318037614 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:43+05:00] Slot with number 318037614 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:44+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:44+05:00] Response body: "Result: 318037619, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:44+05:00] Begin analyse slot with number: 318037619    
+[36mINFO[0m[2025-02-02T22:54:44+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:45+05:00] Slot with number 318037619 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:45+05:00] Slot with number 318037619 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:46+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:46+05:00] Response body: "Result: 318037624, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:46+05:00] Begin analyse slot with number: 318037624    
+[36mINFO[0m[2025-02-02T22:54:46+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:47+05:00] Slot with number 318037624 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:47+05:00] Slot with number 318037624 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Response body: "Result: 318037629, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Begin analyse slot with number: 318037629    
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Slot with number 318037629 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:48+05:00] Slot with number 318037629 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:50+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:50+05:00] Response body: "Result: 318037635, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:50+05:00] Begin analyse slot with number: 318037635    
+[36mINFO[0m[2025-02-02T22:54:50+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:50+05:00] Error when get block information by slot with number: 318037635, error: Code: -32004, Message: Block not available for slot 318037635 
+[36mINFO[0m[2025-02-02T22:54:52+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:52+05:00] Response body: "Result: 318037640, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:52+05:00] Begin analyse slot with number: 318037640    
+[36mINFO[0m[2025-02-02T22:54:52+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:53+05:00] Slot with number 318037640 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:53+05:00] Slot with number 318037640 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:54+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:54+05:00] Response body: "Result: 318037644, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:54+05:00] Begin analyse slot with number: 318037644    
+[36mINFO[0m[2025-02-02T22:54:54+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:55+05:00] Slot with number 318037644 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:55+05:00] Slot with number 318037644 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:56+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:56+05:00] Response body: "Result: 318037649, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:56+05:00] Begin analyse slot with number: 318037649    
+[36mINFO[0m[2025-02-02T22:54:56+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:57+05:00] Slot with number 318037649 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:57+05:00] Slot with number 318037649 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:54:58+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:54:58+05:00] Response body: "Result: 318037654, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:54:58+05:00] Begin analyse slot with number: 318037654    
+[36mINFO[0m[2025-02-02T22:54:58+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:54:59+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:54:59+05:00] Slot with number 318037654 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:54:59+05:00] Slot with number 318037654 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:00+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:00+05:00] Response body: "Result: 318037658, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:00+05:00] Begin analyse slot with number: 318037658    
+[36mINFO[0m[2025-02-02T22:55:00+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:00+05:00] Error when get block information by slot with number: 318037658, error: Code: -32004, Message: Block not available for slot 318037658 
+[36mINFO[0m[2025-02-02T22:55:02+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:02+05:00] Response body: "Result: 318037663, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:02+05:00] Begin analyse slot with number: 318037663    
+[36mINFO[0m[2025-02-02T22:55:03+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:03+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:55:03+05:00] Slot with number 318037663 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:03+05:00] Slot with number 318037663 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:04+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:04+05:00] Response body: "Result: 318037666, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:04+05:00] Begin analyse slot with number: 318037666    
+[36mINFO[0m[2025-02-02T22:55:05+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:05+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:55:05+05:00] Slot with number 318037666 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:05+05:00] Slot with number 318037666 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:06+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:06+05:00] Response body: "Result: 318037673, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:06+05:00] Begin analyse slot with number: 318037673    
+[36mINFO[0m[2025-02-02T22:55:06+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:07+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:55:07+05:00] Slot with number 318037673 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:07+05:00] Slot with number 318037673 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:08+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:08+05:00] Response body: "Result: 318037678, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:08+05:00] Begin analyse slot with number: 318037678    
+[36mINFO[0m[2025-02-02T22:55:08+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:08+05:00] Error when get block information by slot with number: 318037678, error: Code: -32004, Message: Block not available for slot 318037678 
+[36mINFO[0m[2025-02-02T22:55:10+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:10+05:00] Response body: "Result: 318037683, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:10+05:00] Begin analyse slot with number: 318037683    
+[36mINFO[0m[2025-02-02T22:55:11+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:11+05:00] Slot with number 318037683 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:11+05:00] Slot with number 318037683 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:12+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:12+05:00] Response body: "Result: 318037688, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:12+05:00] Begin analyse slot with number: 318037688    
+[36mINFO[0m[2025-02-02T22:55:12+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:13+05:00] Slot with number 318037688 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:13+05:00] Slot with number 318037688 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:14+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:14+05:00] Response body: "Result: 318037693, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:14+05:00] Begin analyse slot with number: 318037693    
+[36mINFO[0m[2025-02-02T22:55:14+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:15+05:00] Slot with number 318037693 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:15+05:00] Slot with number 318037693 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:16+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:16+05:00] Response body: "Result: 318037696, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:16+05:00] Begin analyse slot with number: 318037696    
+[36mINFO[0m[2025-02-02T22:55:17+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:17+05:00] Slot with number 318037696 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:17+05:00] Slot with number 318037696 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:18+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:18+05:00] Response body: "Result: 318037704, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:18+05:00] Begin analyse slot with number: 318037704    
+[36mINFO[0m[2025-02-02T22:55:18+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:19+05:00] Error when convert body to json, error : "json: cannot unmarshal string into Go struct field .result.transactions.meta.innerInstructions.instructions.parsed of type struct { Info struct { Mint string \"json:\\\"mint,omitempty\\\"\" } \"json:\\\"info\\\"\" }" 
+[36mINFO[0m[2025-02-02T22:55:19+05:00] Slot with number 318037704 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:19+05:00] Slot with number 318037704 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:20+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:20+05:00] Response body: "Result: 318037709, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:20+05:00] Begin analyse slot with number: 318037709    
+[36mINFO[0m[2025-02-02T22:55:20+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:20+05:00] Error when get block information by slot with number: 318037709, error: Code: -32004, Message: Block not available for slot 318037709 
+[36mINFO[0m[2025-02-02T22:55:22+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:22+05:00] Response body: "Result: 318037714, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:22+05:00] Begin analyse slot with number: 318037714    
+[36mINFO[0m[2025-02-02T22:55:22+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[31mERRO[0m[2025-02-02T22:55:22+05:00] Error when get block information by slot with number: 318037714, error: Code: -32004, Message: Block not available for slot 318037714 
+[36mINFO[0m[2025-02-02T22:55:24+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:24+05:00] Response body: "Result: 318037719, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:24+05:00] Begin analyse slot with number: 318037719    
+[36mINFO[0m[2025-02-02T22:55:24+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:25+05:00] Slot with number 318037719 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:25+05:00] Slot with number 318037719 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:26+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:26+05:00] Response body: "Result: 318037724, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:26+05:00] Begin analyse slot with number: 318037724    
+[36mINFO[0m[2025-02-02T22:55:27+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:27+05:00] Slot with number 318037724 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:27+05:00] Slot with number 318037724 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:28+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:28+05:00] Response body: "Result: 318037729, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:28+05:00] Begin analyse slot with number: 318037729    
+[36mINFO[0m[2025-02-02T22:55:28+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:29+05:00] Slot with number 318037729 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:29+05:00] Slot with number 318037729 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:30+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:30+05:00] Response body: "Result: 318037734, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:30+05:00] Begin analyse slot with number: 318037734    
+[36mINFO[0m[2025-02-02T22:55:30+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:31+05:00] Slot with number 318037734 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:31+05:00] Slot with number 318037734 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:32+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:32+05:00] Response body: "Result: 318037738, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:32+05:00] Begin analyse slot with number: 318037738    
+[36mINFO[0m[2025-02-02T22:55:32+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:33+05:00] Slot with number 318037738 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:33+05:00] Slot with number 318037738 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:34+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:34+05:00] Response body: "Result: 318037744, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:34+05:00] Begin analyse slot with number: 318037744    
+[36mINFO[0m[2025-02-02T22:55:35+05:00] Got reponse from solana RPC, method: '"getBlock"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:35+05:00] Slot with number 318037744 got transaction, start search 
+[36mINFO[0m[2025-02-02T22:55:35+05:00] Slot with number 318037744 not exists DCA orders! 
+[36mINFO[0m[2025-02-02T22:55:36+05:00] Got reponse from solana RPC, method: '"getSlot"', code: 200 
+[36mINFO[0m[2025-02-02T22:55:36+05:00] Response body: "Result: 318037750, Error: \"Code: 0, Message: \"" 
+[36mINFO[0m[2025-02-02T22:55:36+05:00] Begin analyse slot with number: 318037750    

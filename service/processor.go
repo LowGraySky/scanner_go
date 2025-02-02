@@ -4,9 +4,12 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"strconv"
 	"sync"
+	"time"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
 )
+
+const dateTimeLayout = "02 Jan 2006 15:04:05"
 
 var (
 	parsedSlotMap sync.Map
@@ -55,17 +58,28 @@ func isAlreadyRead(number uint) bool {
 }
 
 func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
+	start := time.Now()
+	eta := eta(transactionData.InstructionData)
+	end := start.Add(time.Duration(eta) * time.Minute)
 	return model.TelegramDCAOrderMessage{
 		Symbol:               transactionData.TokenSymbol,
 		Operation:            transactionData.Operation.String(),
-		Eta:                  eta(transactionData.InstructionData),
+		Eta:                  eta,
 		PotencialPriceChange: calculatePriceChange(transactionData.InstructionData),
 		TokenCA:              transactionData.Token,
 		UserAddress:          transactionData.User,
-		InAmount:             transactionData.InstructionData.InAmount,
-		PeriodStart:          "",
-		PeriodEnd:            "",
+		InAmount:             round(transactionData.InstructionData.InAmount),
+		InAmountPerCycle:     round(transactionData.InstructionData.InAmountPerCycle),
+		PeriodStart:          start.UTC().Format(dateTimeLayout),
+		PeriodEnd:            end.UTC().Format(dateTimeLayout),
+		MexcFutures:          true, // TODO <--
 	}
+}
+
+func round(val string) int {
+	r, _ := strconv.Atoi(val)
+	res := r/100000
+	return res
 }
 
 func eta(data model.InstructionData) uint {

@@ -2,11 +2,18 @@ package service
 
 import (
 	"encoding/hex"
+	"errors"
 	"github.com/mr-tron/base58"
 	"math/big"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
 )
+
+var stables = map[string]int {
+	"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": 0,
+	"So11111111111111111111111111111111111111112": 0,
+	"Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB": 0,
+}
 
 const (
 	tokenAddressProgramName = "spl-associated-token-account"
@@ -28,18 +35,24 @@ func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) 
 		}
 		data = *d
 		instructions := serializeInstructionData(data)
-		tranasctionData := s.createTransactionAditionalData(tx, instructions)
+		tranasctionData, err := s.createTransactionAditionalData(tx, instructions)
+		if err != nil {
+			config.Log.Errorf("Error when serilizing transaction in slot: %d, error: %q", slotNumber, err.Error())
+			continue
+		}
 		dcaOrders = append(dcaOrders, tranasctionData)
 	}
 	return dcaOrders
 }
 
-func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) model.TransactionData {
-	token, operation := defineTokenAndOrderOperation(tx)
-	tokenInfo, err := s.JupiterCaller.GetToken(token)
+func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) (model.TransactionData, error) {
+	token, operation, err := defineTokenAndOrderOperation(tx)
 	if err != nil {
-		config.Log.Errorf("Error when fetch token data by address: %s, error: %q", token, err.Error())
-		return model.TransactionData{}
+		return model.TransactionData{}, err
+	}
+	tokenInfo, err1 := s.JupiterCaller.GetToken(token)
+	if err1 != nil {
+		return model.TransactionData{}, err1
 	}
 	return model.TransactionData{
 		Token:           token,
@@ -47,12 +60,20 @@ func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, in
 		User:            findUserCA(tx),
 		Operation:       operation,
 		InstructionData: inst,
-	}
+	}, nil
 }
 
-func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation) {
+func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation, error) {
 	tokens := collectTokenAddress(tx)
-	return tokens[0], model.SELL
+	_, ex1 := stables[tokens[0]]
+	_, ex2 := stables[tokens[1]]
+	if ex1 {
+		return tokens[1], model.BUY, nil
+	}
+	if ex2 {
+		return tokens[0], model.SELL, nil
+	}
+	return "", model.BUY, errors.New("can't find token and define operation type, no stable in order")
 }
 
 func collectTokenAddress(tx model.Transaction) []string {

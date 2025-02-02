@@ -11,8 +11,8 @@ type TelegramDCAOrderMessage struct {
 	PotencialPriceChange float32
 	TokenCA              string
 	UserAddress          string
-	InAmount             string
-	InAmountPerCycle	string
+	InAmount             int
+	InAmountPerCycle     int
 	PeriodStart          string
 	PeriodEnd            string
 	MexcFutures          bool
@@ -33,15 +33,15 @@ Potential price change: %d %
 CA: %s
 
 User: %s
-Period: %s - %s
-	`, tm.InAmount, tm.Operation, tm.Symbol,
-	tm.InAmountPerCycle, tm.Eta,
-	tm.Eta,
-	tm.PotencialPriceChange,
-	futures,
-	tm.TokenCA,
-	tm.UserAddress,
-	tm.PeriodStart, tm.PeriodEnd,
+Period: %s - %s`,
+		tm.InAmount, tm.Operation, tm.Symbol,
+		tm.InAmountPerCycle, tm.Eta,
+		tm.Eta,
+		tm.PotencialPriceChange,
+		futures,
+		tm.TokenCA,
+		tm.UserAddress,
+		tm.PeriodStart, tm.PeriodEnd,
 	)
 }
 

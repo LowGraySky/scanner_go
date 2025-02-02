@@ -58,14 +58,14 @@ type Transaction struct {
 
 type Meta struct {
 	LogMessages []string `json:"logMessages"`
-	InnerInstructions []struct {
+	InnerInstructions    []struct {
 		Instructions []struct {
 			Parsed struct {
 				Info struct {
 					Mint string `json:"mint,omitempty"`
 				} `json:"info"`
-			} `json:"parsed"`
-			Program string `json:"program"`
+			} `json:"parsed,omitempty"`
+			Program     string   `json:"program,omitempty"`
 		} `json:"instructions"`
 	} `json:"innerInstructions"`
 }
