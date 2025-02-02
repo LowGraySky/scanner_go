@@ -24,10 +24,10 @@ func (tm TelegramDCAOrderMessage) String() string {
 		futures = "Futures: MEXC"
 	}
 	return fmt.Sprintf(`
-%s %s %s
+%d %s %s
 
 Frequency: %d every 60 seconds (%d cycles)
-ETA: %sm
+ETA: %dm
 Potential price change: %d %
 %s
 CA: %s
