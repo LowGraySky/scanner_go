@@ -7,8 +7,8 @@ import (
 )
 
 const (
-    Baseurl       = "https://api.jup.ag"
-    TokenInfoPath = "/tokens/v1/token/"
+    JupiterBaseUrl = "https://api.jup.ag"
+    TokenInfoPath  = "/tokens/v1/token/"
 )
 
 var answers = make(map[string]model.TokenInfo)
@@ -30,7 +30,7 @@ func (jc *RealJupiterCaller) GetToken(address string) (model.TokenInfo, error) {
 }
 
 func fetchData(address string) (model.TokenInfo, error) {
-    res, err := http.Get(BaseUrl + TokenInfoPath + address)
+    res, err := http.Get(JupiterBaseUrl + TokenInfoPath + address)
     if err != nil {
         config.Log.Errorf("Error when request to jupiter token info, error: %q", err.Error())
         return model.TokenInfo{}, err

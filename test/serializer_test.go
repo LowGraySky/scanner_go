@@ -7,17 +7,26 @@ import (
 )
 
 func TestSerializer(t *testing.T) {
-	serializer := new(service.RealSerializer)
+	serializer := service.RealSerializer{
+		JupiterCaller: &service.RealJupiterCaller{},
+	}
 	transactions := ReadBlockResponseFromFile().Result.Transactions
 
 	actual := serializer.Serialize(1, transactions)
 
 	c := assert.Equal(t, len(actual), 1)
-	ame := assert.Equal(t, actual[0].InstructionData.InAmount, "8272121570535")
-	ampe := assert.Equal(t, actual[0].InstructionData.InAmountPerCycle, "33088486282")
-	cfe := assert.Equal(t, actual[0].InstructionData.CycleFrequency, "60")
-	res := c && ame && ampe && cfe
-	if !res {
+	res := actual[0]
+
+	ame := assert.Equal(t, res.InstructionData.InAmount, "8272121.570535")
+	ampe := assert.Equal(t, res.InstructionData.InAmountPerCycle, "33088.486282")
+	cfe := assert.Equal(t, res.InstructionData.CycleFrequency, "60")
+	tkcae := assert.Equal(t, res.Token, "DVZrNS9fctrrDmhZUZAu6p63xU6d9cqYxRRhJbtJ4z8G")
+	tksymbe := assert.Equal(t, res.TokenSymbol, "Ross")
+	opee := assert.Equal(t, res.Operation.String(), "SELL")
+	usae := assert.Equal(t, res.User, "7DiaCzvNmMcA7z8J3McC3VaUDJJTdKPQCd9YTAThSTaY")
+
+	r := c && ame && ampe && cfe && tkcae && tksymbe && opee && usae
+	if !r {
 		t.Error("")
 	}
 }

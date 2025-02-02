@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	BaseUrl = "https://api.mainnet-beta.solana.com"
+	SolanaNodeBaseUrl          = "https://api.mainnet-beta.solana.com"
 	ApplicationJsonContentType = "application/json"
 	JsonRpcValue = "2.0"
 	IdValue = 1
@@ -26,7 +26,7 @@ func (sc *RealSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
 		Id: IdValue,
 		Method: GetSlotMethodName,
 	}
-	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
+	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q", GetSlotMethodName, err.Error())
 		return model.GetSlotResponseBody{}, err
@@ -45,7 +45,7 @@ func (sc *RealSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBod
 		Method: GetBlockMethodName,
 		Params: []interface{}{ slotNumber, defaultGetBlockParamsBody },
 	}
-	res, err := http.Post(BaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
+	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
 	if err != nil {
 		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 		return model.GetBlockResponseBody{}, err

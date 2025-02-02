@@ -52,11 +52,11 @@ func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, in
 
 func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation) {
 	tokens := collectTokenAddress(tx)
-	return tokens[1], model.BUY
+	return tokens[0], model.SELL
 }
 
 func collectTokenAddress(tx model.Transaction) []string {
-	tokens := make([]string, 2)
+	var tokens []string
 	for _, inst := range tx.Meta.InnerInstructions {
 		for _, i := range inst.Instructions {
 			if i.Program == tokenAddressProgramName {

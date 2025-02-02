@@ -1,6 +1,7 @@
 package test
 
 import (
+	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/stretchr/testify/mock"
 	"testing"
 	"web3.kz/solscan/model"
@@ -29,7 +30,7 @@ func TestProcess(t *testing.T) {
 	mockCaller.On("GetBlock", getSlotResponse.Result).Return(getBlockResponseBody, nil)
 	mockAnalyser.On("Analyse", getSlotResponse.Result, mock.Anything).Return(make([]model.Transaction, 0))
 
-	processor.Process()
+	processor.Process(gotgbot.Bot{})
 
 	expectation := mockCaller.AssertExpectations(t)
 

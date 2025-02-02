@@ -1,26 +1,70 @@
 package model
 
 import (
-	"encoding/json"
-	"web3.kz/solscan/config"
+	"fmt"
 )
 
 type TelegramDCAOrderMessage struct {
-	Symbol string `json:"symbol"`
-	Operation string `json:"operation"`
-	Eta uint `json:"eta"`
-	PotencialPriceChange float32 `json:"potencial_price_change"`
-	TokenCA string `json:"token_ca"`
-	UserAddress string `json:"user_address"`
-	InAmount string `json:"in_amount"`
-	PeriodStart string `json:"period_start"`
-	PeriodEnd string `json:"period_end"`
+	Symbol               string
+	Operation            string
+	Eta                  uint
+	PotencialPriceChange float32
+	TokenCA              string
+	UserAddress          string
+	InAmount             string
+	InAmountPerCycle	string
+	PeriodStart          string
+	PeriodEnd            string
+	MexcFutures          bool
 }
 
 func (tm TelegramDCAOrderMessage) String() string {
-	str, err := json.Marshal(tm)
-	if err != nil {
-		config.Log.Errorf("Error when convert data to json, error: %q", err.Error())
+	futures := ""
+	if tm.MexcFutures {
+		futures = "Futures: MEXC"
 	}
-	return string(str)
+	return fmt.Sprintf(`
+%s %s %s
+
+Frequency: %d every 60 seconds (%d cycles)
+ETA: %sm
+Potential price change: %d %
+%s
+CA: %s
+
+User: %s
+Period: %s - %s
+	`, tm.InAmount, tm.Operation, tm.Symbol,
+	tm.InAmountPerCycle, tm.Eta,
+	tm.Eta,
+	tm.PotencialPriceChange,
+	futures,
+	tm.TokenCA,
+	tm.UserAddress,
+	tm.PeriodStart, tm.PeriodEnd,
+	)
 }
+
+//$70.62K selling HOOD 🟥
+//
+//Frequency: $706.19 every 60 seconds (101 cycles)
+//ETA: 1h, 41m
+//Scores: 🤔
+//Potential price change: 10.387% (0.113% per cycle)
+//
+//MC: $33.57M → LQ: $1.25M
+//Holders: 64,245
+//V24h: $49.79M → V1h: $1.68M → VI1h: 3372.31792%
+//Price: $0.00075
+//
+//Futures: MEXC
+//
+//Trade bots: BLX - PHO - PEP - STB - TRO - BLO - BNK
+//
+//CA: h5NciPdMZ5QCB5BYETJMYBMpVx9ZuitR6HcVjyBhood
+//#HcVjyBhood
+//
+//User: HvDf4Cxd2evdYueLhK5LoaiEvDXFXgb1uRrkoYPdvHfH
+//#rkoYPdvHfH
+//
+//Period: 02 Feb 2025 15:45:49 - 02 Feb 2025 17:26:49 GMT
