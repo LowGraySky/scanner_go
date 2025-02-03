@@ -61,12 +61,12 @@ func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, in
 
 func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation) {
 	tokens := collectTokenAddress(tx)
-	_, ex1 := stables[tokens[0]]
-	_, ex2 := stables[tokens[1]]
-	if ex1 {
+	_, in := stables[tokens[0]]
+	_, out := stables[tokens[1]]
+	if in {
 		return tokens[1], model.BUY
 	}
-	if ex2 {
+	if out {
 		return tokens[0], model.SELL
 	}
 	return tokens[1], model.BUY
@@ -74,13 +74,8 @@ func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOper
 
 func collectTokenAddress(tx model.Transaction) []string {
 	tokens := make([]string, 2)
-	for _, balance := range tx.Meta.PostTokenBalances {
-		if tokens[0] == "" {
-			tokens[0] = balance.Mint
-		} else {
-			tokens[1] = balance.Mint
-		}
-	}
+	tokens[0] = tx.Meta.PostTokenBalances[0].Mint
+	tokens[1] = tx.Meta.PostTokenBalances[1].Mint
 	return tokens
 }
 
