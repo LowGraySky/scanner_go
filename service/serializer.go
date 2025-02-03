@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/hex"
-	"errors"
 	"github.com/mr-tron/base58"
 	"math/big"
 	"web3.kz/solscan/config"
@@ -45,10 +44,7 @@ func (s *RealSerializer) Serialize(slotNumber uint, orders []model.Transaction) 
 }
 
 func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, inst model.InstructionData) (model.TransactionData, error) {
-	token, operation, err := defineTokenAndOrderOperation(tx)
-	if err != nil {
-		return model.TransactionData{}, err
-	}
+	token, operation := defineTokenAndOrderOperation(tx)
 	tokenInfo, err1 := s.JupiterCaller.GetToken(token)
 	if err1 != nil {
 		return model.TransactionData{}, err1
@@ -63,17 +59,17 @@ func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, in
 	}, nil
 }
 
-func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation, error) {
+func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOperation) {
 	tokens := collectTokenAddress(tx)
 	_, ex1 := stables[tokens[0]]
 	_, ex2 := stables[tokens[1]]
 	if ex1 {
-		return tokens[1], model.BUY, nil
+		return tokens[1], model.BUY
 	}
 	if ex2 {
-		return tokens[0], model.SELL, nil
+		return tokens[0], model.SELL
 	}
-	return "", model.BUY, errors.New("can't find token and define operation type, no stable in order")
+	return tokens[1], model.BUY
 }
 
 func collectTokenAddress(tx model.Transaction) []string {

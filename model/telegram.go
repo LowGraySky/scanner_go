@@ -31,16 +31,16 @@ func (tm TelegramDCAOrderMessage) String() string {
 	return fmt.Sprintf(`
 %d %s %s %s
 
-**Frequency**: %d every 60 seconds (%d cycles)
-**ETA**: %dm
-**Potential price change**: %f %%
-**Futures**: %s
-**CA**: %s
+<b>Frequency</b>: %d every 60 seconds (%d cycles)
+<b>ETA</b>: %dm
+<b>Potential price change</b>: %f %%
+<b>Futures</b>: %s
+<b>CA</b>: %s
 
-**User**: %s
-**Period**: %s - %s GMT
+<b>User</b>: %s
+<b>Period</b>: %s - %s GMT
 
-[Solscan](https://solscan.io/tx/%s)`,
+<a href="https://solscan.io/tx/%s">Solscan</a>`,
 		tm.InAmount, tm.Operation, tm.Symbol, string(operationSymbol),
 		tm.InAmountPerCycle, tm.Eta,
 		tm.Eta,

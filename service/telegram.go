@@ -18,11 +18,12 @@ func (tc *RealTelegramCaller) StartBot() (*gotgbot.Bot, error) {
 
 func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) {
 	messageOptions := gotgbot.SendMessageOpts{
-		ParseMode: "Markdown",
+		ParseMode: "HTML",
 	}
 	_, err := bot.SendMessage(chatId, message, &messageOptions)
 	if err != nil {
-		config.Log.Errorf("Message %s hasn't delivered!", message)
+		config.Log.Errorf("Message %s hasn't delivered!, err: %q", message, err.Error())
+	} else {
+		config.Log.Infof("Succuess send telegram message: %s", message)
 	}
-	config.Log.Infof("Succuess send telegram message: %s", message)
 }

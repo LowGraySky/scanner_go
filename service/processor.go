@@ -3,17 +3,12 @@ package service
 import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"strconv"
-	"sync"
 	"time"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
 )
 
 const dateTimeLayout = "02 Jan 2006 15:04:05"
-
-var (
-	parsedSlotMap sync.Map
-)
 
 type RealProcessor struct {
 	Analyser       Analyser
@@ -29,32 +24,22 @@ func (r *RealProcessor) Process(bot gotgbot.Bot) {
 		return
 	}
 	slotNumber := slot.Result
-	if isAlreadyRead(slotNumber) {
-		config.Log.Infof("Slot with number %d already processed, SKIP", slotNumber)
+	config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
+	block, _ := r.SolanaCaller.GetBlock(slotNumber)
+	if block.Error.Code != 0 && block.Error.Message != "" {
+		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
+		return
+	}
+	orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
+	if len(orders) == 0 {
+		config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
 	} else {
-		config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
-		block, _ := r.SolanaCaller.GetBlock(slotNumber)
-		if block.Error.Code != 0 && block.Error.Message != "" {
-			config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
-			return
-		}
-		parsedSlotMap.Store(slotNumber, nil)
-		orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
-		if len(orders) == 0 {
-			config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
-		} else {
-			txData := r.Serialiser.Serialize(slotNumber, orders)
-			for _, d := range txData {
-				msg := constructTelegramMessage(d)
-				r.TelegramCaller.SendMessage(bot, msg.String())
-			}
+		txData := r.Serialiser.Serialize(slotNumber, orders)
+		for _, d := range txData {
+			msg := constructTelegramMessage(d)
+			r.TelegramCaller.SendMessage(bot, msg.String())
 		}
 	}
-}
-
-func isAlreadyRead(number uint) bool {
-	_, exists := parsedSlotMap.Load(number)
-	return exists
 }
 
 func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
