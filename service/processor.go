@@ -73,6 +73,7 @@ func constructTelegramMessage(transactionData model.TransactionData) model.Teleg
 		PeriodStart:          start.UTC().Format(dateTimeLayout),
 		PeriodEnd:            end.UTC().Format(dateTimeLayout),
 		MexcFutures:          true, // TODO <--
+		Signature: 			  transactionData.Signature,
 	}
 }
 

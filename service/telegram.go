@@ -17,7 +17,10 @@ func (tc *RealTelegramCaller) StartBot() (*gotgbot.Bot, error) {
 }
 
 func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) {
-	_, err := bot.SendMessage(chatId, message, nil)
+	messageOptions := gotgbot.SendMessageOpts{
+		ParseMode: "Markdown",
+	}
+	_, err := bot.SendMessage(chatId, message, &messageOptions)
 	if err != nil {
 		config.Log.Errorf("Message %s hasn't delivered!", message)
 	}

@@ -18,6 +18,7 @@ type RealJupiterCaller struct{}
 func (jc *RealJupiterCaller) GetToken(address string) (model.TokenInfo, error) {
     if isExists(address) {
         val, _ := answers[address]
+        config.Log.Infof("Got token information by token: %s in cache, use it", val.Symbol)
         return val, nil
     } else {
         response, err := fetchData(address)

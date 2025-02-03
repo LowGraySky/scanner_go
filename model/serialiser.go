@@ -25,4 +25,5 @@ type TransactionData struct {
 	User            string
 	Operation       OrderOperation
 	InstructionData InstructionData
+	Signature 		string
 }

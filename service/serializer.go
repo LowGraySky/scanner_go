@@ -16,7 +16,6 @@ var stables = map[string]int {
 }
 
 const (
-	tokenAddressProgramName = "spl-associated-token-account"
 	dcaOpenV2ProgramId      = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 )
 
@@ -60,6 +59,7 @@ func (s *RealSerializer) createTransactionAditionalData(tx model.Transaction, in
 		User:            findUserCA(tx),
 		Operation:       operation,
 		InstructionData: inst,
+		Signature: 		 tx.TransactionDetails.Signatures[0],
 	}, nil
 }
 
@@ -77,12 +77,12 @@ func defineTokenAndOrderOperation(tx model.Transaction) (string, model.OrderOper
 }
 
 func collectTokenAddress(tx model.Transaction) []string {
-	var tokens []string
-	for _, inst := range tx.Meta.InnerInstructions {
-		for _, i := range inst.Instructions {
-			if i.Program == tokenAddressProgramName {
-				tokens = append(tokens, i.Parsed.Info.Mint)
-			}
+	tokens := make([]string, 2)
+	for _, balance := range tx.Meta.PostTokenBalances {
+		if tokens[0] == "" {
+			tokens[0] = balance.Mint
+		} else {
+			tokens[1] = balance.Mint
 		}
 	}
 	return tokens

@@ -57,17 +57,10 @@ type Transaction struct {
 }
 
 type Meta struct {
+	PostTokenBalances []struct {
+          Mint          string `json:"mint"`
+        } `json:"postTokenBalances"`
 	LogMessages []string `json:"logMessages"`
-	InnerInstructions    []struct {
-		Instructions []struct {
-			Parsed struct {
-				Info struct {
-					Mint string `json:"mint,omitempty"`
-				} `json:"info"`
-			} `json:"parsed,omitempty"`
-			Program     string   `json:"program,omitempty"`
-		} `json:"instructions"`
-	} `json:"innerInstructions"`
 }
 
 type TransactionDetails struct {
