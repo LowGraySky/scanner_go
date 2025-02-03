@@ -24,8 +24,9 @@ func TestSerializer(t *testing.T) {
 	tksymbe := assert.Equal(t, res.TokenSymbol, "Ross")
 	opee := assert.Equal(t, res.Operation.String(), "SELL")
 	usae := assert.Equal(t, res.User, "7DiaCzvNmMcA7z8J3McC3VaUDJJTdKPQCd9YTAThSTaY")
+	se := assert.Equal(t, res.Signature, "4LFqsgwRWWsQpcy3P9ZxmxQo8dX5fob8oU9Zs71VbSWbt8rnc7ovXdnCx9U2N3khxZogLCpyPbsKiZ5Nsr1GYv7k")
 
-	r := c && ame && ampe && cfe && tkcae && tksymbe && opee && usae
+	r := c && ame && ampe && cfe && tkcae && tksymbe && opee && usae && se
 	if !r {
 		t.Error("")
 	}
