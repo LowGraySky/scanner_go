@@ -9,8 +9,8 @@ import (
 	"web3.kz/solscan/model"
 )
 
-func ReadBlockResponseFromFile() model.GetBlockResponseBody {
-	file, err := os.Open("files/test_data.txt")
+func ReadBlockResponseFromFile(path string) model.GetBlockResponseBody {
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}

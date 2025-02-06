@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"github.com/PaulSonOfLars/gotgbot/v2"
 	"strconv"
 	"time"
 	"web3.kz/solscan/config"
@@ -19,7 +18,6 @@ var ctx = context.Background()
 type RealProcessor struct {
 	Analyser       Analyser
 	Serialiser     Serialiser
-	Bot            gotgbot.Bot
 	SolanaCaller   SolanaCaller
 	RedisCaller    RedisCaller[string, int64]
 	TelegramCaller TelegramCaller
@@ -68,7 +66,7 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 		return err
 	}
 	msg := constructTelegramMessage(data)
-	tgMessage, err := r.TelegramCaller.SendMessage(r.Bot, msg.String())
+	tgMessage, err := r.TelegramCaller.SendMessage(msg.String())
 	if err != nil {
 		config.Log.Errorf("Error when send message %s  from slot %data to telegram, error: ", msg.String(), slotNumber, err.Error())
 		return err
@@ -88,7 +86,7 @@ func (r *RealProcessor) processCloseOrder(order model.Transaction) {
 	if err != nil {
 		config.Log.Error("Error when GET ")
 	}
-	err1 := r.TelegramCaller.SendReplyMessage(r.Bot, dcaClosedByUserMesssage, messageId)
+	err1 := r.TelegramCaller.SendReplyMessage(dcaClosedByUserMesssage, messageId)
 	if err1 != nil {
 		config.Log.Errorf("Error when reply ")
 	}

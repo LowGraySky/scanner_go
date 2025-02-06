@@ -9,7 +9,7 @@ import (
 
 func TestAnalyseExists(t *testing.T) {
 	analyser := new(service.RealAnalyser)
-	blockResponse := ReadBlockResponseFromFile()
+	blockResponse := ReadBlockResponseFromFile("files/test_data_open_order.txt")
 	transactions := blockResponse.Result.Transactions
 
 	actual := analyser.Analyse(1, transactions)
@@ -27,7 +27,7 @@ func TestAnalyseExists(t *testing.T) {
 func TestAnalyseNotExists(t *testing.T) {
 	analyser := new(service.RealAnalyser)
 	transactions := []model.Transaction{
-		model.Transaction{
+		{
 			Meta: model.Meta{
 				LogMessages: []string{
 					"Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 3158 of 216383 compute units",
@@ -42,11 +42,8 @@ func TestAnalyseNotExists(t *testing.T) {
 	actual := analyser.Analyse(1, transactions)
 
 	n := assert.NotNil(t, actual)
-	if !n {
-		t.Error("")
-	}
 	c := assert.Equal(t, len(actual), 0)
-	if !c {
+	if !c && !n  {
 		t.Error("")
 	}
 }

@@ -5,29 +5,26 @@ import (
 )
 
 const (
-	chatId           int64 = 8135757102
-	telegramBotToken       = "7460083410:AAF08myRfMh53DMJkefZvNhOQpddcJxPO5Q"
+	chatId int64 = 8135757102
 )
 
-type RealTelegramCaller struct{}
-
-func (tc *RealTelegramCaller) StartBot() (*gotgbot.Bot, error) {
-	return gotgbot.NewBot(telegramBotToken, nil)
+type RealTelegramCaller struct {
+	Bot gotgbot.Bot
 }
 
-func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) (*gotgbot.Message, error) {
+func (tc *RealTelegramCaller) SendMessage(message string) (*gotgbot.Message, error) {
 	messageOptions := gotgbot.SendMessageOpts{
 		ParseMode: "HTML",
 	}
-	return bot.SendMessage(chatId, message, &messageOptions)
+	return tc.Bot.SendMessage(chatId, message, &messageOptions)
 }
 
-func (tc *RealTelegramCaller) SendReplyMessage(bot gotgbot.Bot, message string, messageId int64) error {
+func (tc *RealTelegramCaller) SendReplyMessage(message string, messageId int64) error {
 	replyMessageOptions := gotgbot.SendMessageOpts{
 		ReplyParameters: &gotgbot.ReplyParameters{
 			MessageId: messageId,
 		},
 	}
-	_, err := bot.SendMessage(chatId, message, &replyMessageOptions)
+	_, err := tc.Bot.SendMessage(chatId, message, &replyMessageOptions)
 	return err
 }

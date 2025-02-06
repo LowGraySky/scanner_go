@@ -8,6 +8,8 @@ import (
 	"web3.kz/solscan/service"
 )
 
+const telegramBotToken = "7460083410:AAF08myRfMh53DMJkefZvNhOQpddcJxPO5Q"
+
 func main() {
 	go schedule()
 
@@ -18,35 +20,39 @@ func schedule() {
 	config.Log.Info("Start analyse task")
 	ticker := time.NewTicker(2 * time.Second)
 	defer ticker.Stop()
-	telegramCaller := &service.RealTelegramCaller{}
-	var bot gotgbot.Bot
-	tgbot, err := telegramCaller.StartBot()
+	processor, err := initProcessor()
 	if err != nil {
-		config.Log.Errorf("Error when statring telegram bot, error: %q", err.Error())
 		return
 	}
-	bot = *tgbot
+	for range ticker.C {
+		processor.Process()
+	}
+}
+
+func initProcessor() (*service.RealProcessor, error) {
+	bot, err := gotgbot.NewBot(telegramBotToken, nil)
+	if err != nil {
+		config.Log.Errorf("Error when statring telegram bot, error: %q", err.Error())
+		return &service.RealProcessor{}, err
+	}
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
-	processor := &service.RealProcessor{
-		Bot:      bot,
+	return &service.RealProcessor{
 		Analyser: &service.RealAnalyser{},
 		Serialiser: &service.RealSerializer{
 			TokenFetcher: &service.RealTokenFetcher{
 				JupiterCaller: &service.RealJupiterCaller{},
 			},
 		},
-		RedisCaller:    &service.RealRedisCaller{
+		RedisCaller: &service.RealRedisCaller{
 			RedisClient: *redisClient,
 		},
-		SolanaCaller:   &service.RealSolanaCaller{},
-		TelegramCaller: telegramCaller,
-	}
-
-	for range ticker.C {
-		processor.Process()
-	}
+		SolanaCaller: &service.RealSolanaCaller{},
+		TelegramCaller: &service.RealTelegramCaller{
+			Bot: *bot,
+		},
+	}, nil
 }

@@ -25,9 +25,8 @@ type SolanaCaller interface {
 }
 
 type TelegramCaller interface {
-	StartBot() (*gotgbot.Bot, error)
-	SendMessage(bot gotgbot.Bot, message string) (*gotgbot.Message, error)
-	SendReplyMessage(bot gotgbot.Bot, message string, messageId int64) error
+	SendMessage(message string) (*gotgbot.Message, error)
+	SendReplyMessage(message string, messageId int64) error
 }
 
 type JupiterCaller interface {
