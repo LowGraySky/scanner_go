@@ -13,7 +13,7 @@ func TestProcess(t *testing.T) {
 	mockAnalyser := new(MockAnalyser)
 	processor := service.RealProcessor{
 		Analyser:     mockAnalyser,
-		Serialiser:   &service.RealSerializer{},
+		Serialiser:   &service.OpenOrderSerializer{},
 		SolanaCaller: mockCaller,
 	}
 	getSlotResponse := model.GetSlotResponseBody{

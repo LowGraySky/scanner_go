@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
-	"web3.kz/solscan/config"
 )
 
 const (
@@ -16,14 +15,19 @@ func (tc *RealTelegramCaller) StartBot() (*gotgbot.Bot, error) {
 	return gotgbot.NewBot(telegramBotToken, nil)
 }
 
-func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) {
+func (tc *RealTelegramCaller) SendMessage(bot gotgbot.Bot, message string) (*gotgbot.Message, error) {
 	messageOptions := gotgbot.SendMessageOpts{
 		ParseMode: "HTML",
 	}
-	_, err := bot.SendMessage(chatId, message, &messageOptions)
-	if err != nil {
-		config.Log.Errorf("Message %s hasn't delivered!, err: %q", message, err.Error())
-	} else {
-		config.Log.Infof("Succuess send telegram message: %s", message)
+	return bot.SendMessage(chatId, message, &messageOptions)
+}
+
+func (tc *RealTelegramCaller) SendReplyMessage(bot gotgbot.Bot, message string, messageId int64) error {
+	replyMessageOptions := gotgbot.SendMessageOpts{
+		ReplyParameters: &gotgbot.ReplyParameters{
+			MessageId: messageId,
+		},
 	}
+	_, err := bot.SendMessage(chatId, message, &replyMessageOptions)
+	return err
 }

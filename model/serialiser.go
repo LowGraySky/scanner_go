@@ -20,6 +20,7 @@ type InstructionData struct {
 }
 
 type TransactionData struct {
+	DcaKey			string
 	Token           string
 	TokenSymbol     string
 	User            string

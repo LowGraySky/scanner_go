@@ -7,7 +7,7 @@ import (
 )
 
 func TestSerializer(t *testing.T) {
-	serializer := service.RealSerializer{
+	serializer := service.OpenOrderSerializer{
 		JupiterCaller: &service.RealJupiterCaller{},
 	}
 	transactions := ReadBlockResponseFromFile().Result.Transactions

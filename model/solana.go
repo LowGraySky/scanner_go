@@ -2,6 +2,11 @@ package model
 
 import "fmt"
 
+const (
+	openDcaV2Comment  = "Program log: Instruction: OpenDcaV2"
+	closeDcaV2Comment = "Program log: Instruction: CloseDca"
+)
+
 type RpcCallWithoutParameters struct {
 	JsonRpc string `json:"jsonrpc"`
 	Id      uint   `json:"id"`
@@ -32,14 +37,6 @@ func (r GetSlotResponseBody) String() string {
 	return fmt.Sprintf("Result: %d, Error: %q", r.Result, r.Error)
 }
 
-func (e Error) String() string {
-	return fmt.Sprintf("Code: %d, Message: %s", e.Code, e.Message)
-}
-
-func (td TransactionDetails) String() string {
-	return fmt.Sprintf("Signatures: %s", td.Signatures)
-}
-
 type GetBlockResponseBody struct {
 	JsonRpc string                     `json:"jsonrpc"`
 	Result  GetBlockResponseBodyResult `json:"result"`
@@ -58,9 +55,38 @@ type Transaction struct {
 
 type Meta struct {
 	PostTokenBalances []struct {
-          Mint          string `json:"mint"`
-        } `json:"postTokenBalances"`
+		Mint string `json:"mint"`
+	} `json:"postTokenBalances"`
 	LogMessages []string `json:"logMessages"`
+}
+
+func (m *Meta) IsLogMesssagesExists() bool {
+	return m.LogMessages != nil
+}
+
+func (m *Meta) IsCloseDca() bool {
+	for _, log := range m.LogMessages {
+		if log == closeDcaV2Comment {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Meta) IsOpenDca() bool {
+	for _, log := range m.LogMessages {
+		if log == openDcaV2Comment {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Meta) GetTokenAddress() []string  {
+	tokens := make([]string, 2)
+	tokens[0] = m.PostTokenBalances[0].Mint
+	tokens[1] = m.PostTokenBalances[1].Mint
+	return tokens
 }
 
 type TransactionDetails struct {
@@ -70,14 +96,40 @@ type TransactionDetails struct {
 			Signer bool   `json:"signer"`
 		} `json:"accountKeys"`
 		Instructions []struct {
-			ProgramId string  `json:"programId"`
-			Data      *string `json:"data,omitempty"`
+			Accounts  []string `json:"accounts"`
+			ProgramId string   `json:"programId"`
+			Data      *string  `json:"data,omitempty"`
 		} `json:"instructions"`
 	} `json:"message"`
 	Signatures []string `json:"signatures"`
 }
 
+func (t *TransactionDetails) GetUserCA() string {
+	for _, acc := range t.Message.AccountKeys {
+		if acc.Signer == true {
+			return acc.Pubkey
+		}
+	}
+	return ""
+}
+
+func (t TransactionDetails) String() string {
+	return fmt.Sprintf("Signatures: %s", t.Signatures)
+}
+
+func (t *TransactionDetails) GetDcaKeyOpen() string  {
+	return t.Message.Instructions[0].Accounts[0]
+}
+
+func (t *TransactionDetails) GetDcaKeyClose() string  {
+	return t.Message.Instructions[0].Accounts[1]
+}
+
 type Error struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
+}
+
+func (e Error) String() string {
+	return fmt.Sprintf("Code: %d, Message: %s", e.Code, e.Message)
 }

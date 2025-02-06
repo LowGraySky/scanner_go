@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"strconv"
 	"time"
@@ -8,16 +9,23 @@ import (
 	"web3.kz/solscan/model"
 )
 
-const dateTimeLayout = "02 Jan 2006 15:04:05"
+const (
+	dateTimeLayout = "02 Jan 2006 15:04:05"
+	dcaClosedByUserMesssage = "DCA closed by user"
+)
+
+var ctx = context.Background()
 
 type RealProcessor struct {
 	Analyser       Analyser
 	Serialiser     Serialiser
+	Bot            gotgbot.Bot
 	SolanaCaller   SolanaCaller
+	RedisCaller    RedisCaller[string, int64]
 	TelegramCaller TelegramCaller
 }
 
-func (r *RealProcessor) Process(bot gotgbot.Bot) {
+func (r *RealProcessor) Process() {
 	slot, _ := r.SolanaCaller.GetSlot()
 	if slot.Error.Code != 0 && slot.Error.Message != "" {
 		config.Log.Infof("Error when get slot number, error: %q", slot.Error)
@@ -34,12 +42,61 @@ func (r *RealProcessor) Process(bot gotgbot.Bot) {
 	if len(orders) == 0 {
 		config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
 	} else {
-		txData := r.Serialiser.Serialize(slotNumber, orders)
-		for _, d := range txData {
-			msg := constructTelegramMessage(d)
-			r.TelegramCaller.SendMessage(bot, msg.String())
+		r.processTransactions(slotNumber, orders)
+	}
+}
+
+func (r *RealProcessor) processTransactions(slotNumber uint, orders []model.Transaction) {
+	for _, order := range orders {
+		if order.Meta.IsOpenDca() {
+			err := r.processOpenOrder(slotNumber, order)
+			if err != nil {
+				config.Log.Errorf("")
+				// config.Log.Errorf("Message %s hasn't delivered!, err: %q", msg.String(), err.Error()) <-- change
+			}
+		} else if order.Meta.IsCloseDca() {
+
+		} else {
+			config.Log.Warnf("")
 		}
 	}
+}
+
+func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transaction) error {
+	data, err := r.Serialiser.Serialize(slotNumber, order)
+	if err != nil {
+		return err
+	}
+	msg := constructTelegramMessage(data)
+	tgMessage, err := r.TelegramCaller.SendMessage(r.Bot, msg.String())
+	if err != nil {
+		config.Log.Errorf("Error when send message %s  from slot %data to telegram, error: ", msg.String(), slotNumber, err.Error())
+		return err
+	}
+	config.Log.Infof("Succuess send telegram message: %s", msg.String())
+	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
+	err1 := r.RedisCaller.Set(ctx, dcaKey, tgMessage.MessageId, calculateExpirationTime(data))
+	if err1 != nil {
+		config.Log.Errorf("Error when UPLOAD DCA key %s from slot: %data to redis, error: %q", dcaKey, slotNumber, err1.Error())
+		return err1
+	}
+	return nil
+}
+
+func (r *RealProcessor) processCloseOrder(order model.Transaction) {
+	messageId, err := r.RedisCaller.Get(ctx, order.TransactionDetails.GetDcaKeyClose())
+	if err != nil {
+		config.Log.Error("Error when GET ")
+	}
+	err1 := r.TelegramCaller.SendReplyMessage(r.Bot, dcaClosedByUserMesssage, messageId)
+	if err1 != nil {
+		config.Log.Errorf("Error when reply ")
+	}
+}
+
+func calculateExpirationTime(data model.TransactionData) time.Duration {
+	end := eta(data.InstructionData)
+	return time.Duration(end + 15) * time.Minute
 }
 
 func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
@@ -58,13 +115,13 @@ func constructTelegramMessage(transactionData model.TransactionData) model.Teleg
 		PeriodStart:          start.UTC().Format(dateTimeLayout),
 		PeriodEnd:            end.UTC().Format(dateTimeLayout),
 		MexcFutures:          true, // TODO <--
-		Signature: 			  transactionData.Signature,
+		Signature:            transactionData.Signature,
 	}
 }
 
 func round(val string) int {
 	r, _ := strconv.Atoi(val)
-	res := r/100000
+	res := r / 100000
 	return res
 }
 

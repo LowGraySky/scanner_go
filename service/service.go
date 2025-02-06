@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"github.com/PaulSonOfLars/gotgbot/v2"
+	"time"
 	"web3.kz/solscan/model"
 )
 
 type Processor interface {
-	Process(bot gotgbot.Bot)
+	Process()
 }
 
 type Analyser interface {
@@ -14,7 +16,7 @@ type Analyser interface {
 }
 
 type Serialiser interface {
-	Serialize(slotNumber uint, orders []model.Transaction) []model.TransactionData
+	Serialize(slotNumber uint, orders model.Transaction) (model.TransactionData, error)
 }
 
 type SolanaCaller interface {
@@ -24,9 +26,19 @@ type SolanaCaller interface {
 
 type TelegramCaller interface {
 	StartBot() (*gotgbot.Bot, error)
-	SendMessage(bot gotgbot.Bot, message string)
+	SendMessage(bot gotgbot.Bot, message string) (*gotgbot.Message, error)
+	SendReplyMessage(bot gotgbot.Bot, message string, messageId int64) error
 }
 
 type JupiterCaller interface {
 	GetToken(address string) (model.TokenInfo, error)
+}
+
+type RedisCaller[T any, R any] interface {
+	Get(ctx context.Context, key T) (R, error)
+	Set(ctx context.Context, key T, value R, expiration time.Duration) error
+}
+
+type TokenFetcher interface {
+	GetTokenInfo(address string) (model.TokenInfo, error)
 }

@@ -18,6 +18,12 @@ const (
 	GetBlockMethodName = "getBlock"
 )
 
+var defaultGetBlockParamsBody = model.GetBlockParamsBody {
+	Enconding: "jsonParsed",
+	TransactionVersion: 0,
+	Rewards: false,
+}
+
 type RealSolanaCaller struct {}
 
 func (sc *RealSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
@@ -73,10 +79,4 @@ func toJsonIoReader(v any) io.Reader {
 		config.Log.Errorf("Error when convert value: %q to json, error: %q\n", v, err.Error())
 	}
 	return bytes.NewBuffer(res)
-}
-
-var defaultGetBlockParamsBody = model.GetBlockParamsBody {
-	Enconding: "jsonParsed",
-	TransactionVersion: 0,
-	Rewards: false,
 }
