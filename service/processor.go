@@ -49,13 +49,15 @@ func (r *RealProcessor) processTransactions(slotNumber uint, orders []model.Tran
 		if order.Meta.IsOpenDca() {
 			err := r.processOpenOrder(slotNumber, order)
 			if err != nil {
-				config.Log.Errorf("")
-				// config.Log.Errorf("Message %s hasn't delivered!, err: %q", msg.String(), err.Error()) <-- change
+				config.Log.Errorf("Error when process OPEN DCA order from slot %d, error: %q", slotNumber, err.Error())
 			}
 		} else if order.Meta.IsCloseDca() {
-
+			err1 := r.processCloseOrder(order)
+			if err1 != nil {
+				config.Log.Errorf("Error when process CLOSE DCA order from slot %d, error: %q", slotNumber, err1.Error())
+			}
 		} else {
-			config.Log.Warnf("")
+			config.Log.Warnf("Unknown operation: order NOT CLOSE and NOT OPEN! <--")
 		}
 	}
 }
@@ -81,15 +83,18 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 	return nil
 }
 
-func (r *RealProcessor) processCloseOrder(order model.Transaction) {
+func (r *RealProcessor) processCloseOrder(order model.Transaction) error {
 	messageId, err := r.RedisCaller.Get(ctx, order.TransactionDetails.GetDcaKeyClose())
 	if err != nil {
 		config.Log.Error("Error when GET ")
+		return err
 	}
 	err1 := r.TelegramCaller.SendReplyMessage(dcaClosedByUserMesssage, messageId)
 	if err1 != nil {
 		config.Log.Errorf("Error when reply ")
+		return err1
 	}
+	return nil
 }
 
 func calculateExpirationTime(data model.TransactionData) time.Duration {
