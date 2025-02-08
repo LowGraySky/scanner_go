@@ -5,6 +5,7 @@ import "fmt"
 const (
 	openDcaV2Comment  = "Program log: Instruction: OpenDcaV2"
 	closeDcaV2Comment = "Program log: Instruction: CloseDca"
+	dcaOpenV2ProgramId = "DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M"
 )
 
 type RpcCallWithoutParameters struct {
@@ -118,11 +119,21 @@ func (t TransactionDetails) String() string {
 }
 
 func (t *TransactionDetails) GetDcaKeyOpen() string  {
-	return t.Message.Instructions[0].Accounts[0]
+	for _, inst := range t.Message.Instructions {
+		if inst.ProgramId == dcaOpenV2ProgramId {
+			return inst.Accounts[0]
+		}
+	}
+	return ""
 }
 
 func (t *TransactionDetails) GetDcaKeyClose() string  {
-	return t.Message.Instructions[0].Accounts[1]
+	for _, inst := range t.Message.Instructions {
+		if inst.ProgramId == dcaOpenV2ProgramId {
+			return inst.Accounts[1]
+		}
+	}
+	return ""
 }
 
 type Error struct {
