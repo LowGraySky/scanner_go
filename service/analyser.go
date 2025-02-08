@@ -20,7 +20,7 @@ func (a *RealAnalyser) Analyse(
 		for _, tx := range transactions {
 			meta := tx.Meta
 			if meta.IsLogMesssagesExists() && (meta.IsOpenDca() || meta.IsCloseDca()) {
-				fmt.Printf("Found DCA order, tx: %q", tx.TransactionDetails.Signatures)
+				config.Log.Info("Found DCA order, tx: %q", tx.TransactionDetails.Signatures)
 				orders = append(orders, tx)
 			}
 		}
