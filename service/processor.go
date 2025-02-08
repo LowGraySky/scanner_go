@@ -85,15 +85,15 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 }
 
 func (r *RealProcessor) processCloseOrder(slotNumber uint, order model.Transaction) error {
-	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
+	dcaKey := order.TransactionDetails.GetDcaKeyOpen()
 	messageId, err := r.RedisCaller.Get(ctx, dcaKey)
 	if err != nil {
-		config.Log.Errorf("Error when GET DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err.Error())
+		config.Log.Errorf("Error when get DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err.Error())
 		return err
 	}
 	err1 := r.TelegramCaller.SendReplyMessage(dcaClosedByUserMesssage, messageId)
 	if err1 != nil {
-		config.Log.Errorf("Error when reply ")
+		config.Log.Errorf("Error when reply message with id: %d, error: %q", messageId, err1.Error())
 		return err1
 	}
 	return nil
