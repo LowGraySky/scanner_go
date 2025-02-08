@@ -88,7 +88,7 @@ func (r *RealProcessor) processCloseOrder(slotNumber uint, order model.Transacti
 	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
 	messageId, err := r.RedisCaller.Get(ctx, dcaKey)
 	if err != nil {
-		config.Log.Error("Error when GET DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err.Error())
+		config.Log.Errorf("Error when GET DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err.Error())
 		return err
 	}
 	err1 := r.TelegramCaller.SendReplyMessage(dcaClosedByUserMesssage, messageId)
