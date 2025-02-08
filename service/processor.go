@@ -80,7 +80,7 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 		config.Log.Errorf("Error when UPLOAD DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err1.Error())
 		return err1
 	}
-	config.Log.Info("Upload message id by DCA: %s to storage", dcaKey)
+	config.Log.Infof("Upload message id by DCA key: %s to storage", dcaKey)
 	return nil
 }
 
