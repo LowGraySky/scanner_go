@@ -52,7 +52,7 @@ func (r *RealProcessor) processTransactions(slotNumber uint, orders []model.Tran
 				config.Log.Errorf("Error when process OPEN DCA order from slot %d, error: %q", slotNumber, err.Error())
 			}
 		} else if order.Meta.IsCloseDca() {
-			err1 := r.processCloseOrder(order)
+			err1 := r.processCloseOrder(slotNumber, order)
 			if err1 != nil {
 				config.Log.Errorf("Error when process CLOSE DCA order from slot %d, error: %q", slotNumber, err1.Error())
 			}
@@ -77,16 +77,18 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
 	err1 := r.RedisCaller.Set(ctx, dcaKey, tgMessage.MessageId, calculateExpirationTime(data))
 	if err1 != nil {
-		config.Log.Errorf("Error when UPLOAD DCA key %s from slot: %data to redis, error: %q", dcaKey, slotNumber, err1.Error())
+		config.Log.Errorf("Error when UPLOAD DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err1.Error())
 		return err1
 	}
+	config.Log.Info("Upload message id by DCA: %s to storage", dcaKey)
 	return nil
 }
 
-func (r *RealProcessor) processCloseOrder(order model.Transaction) error {
-	messageId, err := r.RedisCaller.Get(ctx, order.TransactionDetails.GetDcaKeyClose())
+func (r *RealProcessor) processCloseOrder(slotNumber uint, order model.Transaction) error {
+	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
+	messageId, err := r.RedisCaller.Get(ctx, dcaKey)
 	if err != nil {
-		config.Log.Error("Error when GET ")
+		config.Log.Error("Error when GET DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err.Error())
 		return err
 	}
 	err1 := r.TelegramCaller.SendReplyMessage(dcaClosedByUserMesssage, messageId)
