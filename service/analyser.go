@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
 )
