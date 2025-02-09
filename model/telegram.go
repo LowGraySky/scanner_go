@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"strings"
 )
 
 type TelegramDCAOrderMessage struct {
@@ -15,14 +16,23 @@ type TelegramDCAOrderMessage struct {
 	InAmountPerCycle     int
 	PeriodStart          string
 	PeriodEnd            string
-	MexcFutures          bool
+	Futures              []string
 	Signature            string
+	MexcFutures          bool
+	GateFuture           bool
+	BitgetFurutes        bool
 }
 
 func (tm TelegramDCAOrderMessage) String() string {
-	futures := ""
+	futures := make([]string, 0)
 	if tm.MexcFutures {
-		futures = "MEXC"
+		futures = append(futures, "MEXC")
+	}
+	if tm.BitgetFurutes {
+		futures = append(futures, "BITGET")
+	}
+	if tm.GateFuture {
+		futures = append(futures, "GATE")
 	}
 	operationSymbol := "🟩"
 	if tm.Operation == "SELL" {
@@ -45,7 +55,7 @@ func (tm TelegramDCAOrderMessage) String() string {
 		tm.InAmountPerCycle, tm.Eta,
 		tm.Eta,
 		tm.PotencialPriceChange,
-		string(futures),
+		strings.Join(futures[:], " "),
 		tm.TokenCA,
 		tm.UserAddress,
 		tm.PeriodStart, tm.PeriodEnd,

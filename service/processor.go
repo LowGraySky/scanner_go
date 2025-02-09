@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	dateTimeLayout = "02 Jan 2006 15:04:05"
+	dateTimeLayout          = "02 Jan 2006 15:04:05"
 	dcaClosedByUserMesssage = "DCA closed by user"
 )
 
@@ -20,6 +20,7 @@ type RealProcessor struct {
 	Serialiser     Serialiser
 	SolanaCaller   SolanaCaller
 	RedisCaller    RedisCaller[string, int64]
+	TokenFetcher   TokenFetcher
 	TelegramCaller TelegramCaller
 }
 
@@ -67,14 +68,14 @@ func (r *RealProcessor) processOpenOrder(slotNumber uint, order model.Transactio
 	if err != nil {
 		return err
 	}
-	msg := constructTelegramMessage(data)
+	msg := r.constructTelegramMessage(data)
 	tgMessage, err := r.TelegramCaller.SendMessage(msg.String())
 	if err != nil {
 		config.Log.Errorf("Error when send message %s  from slot %data to telegram, error: ", msg.String(), slotNumber, err.Error())
 		return err
 	}
 	config.Log.Infof("Succuess send telegram message: %s", msg.String())
-	dcaKey :=  order.TransactionDetails.GetDcaKeyOpen()
+	dcaKey := order.TransactionDetails.GetDcaKeyOpen()
 	err1 := r.RedisCaller.Set(ctx, dcaKey, tgMessage.MessageId, calculateExpirationTime(data))
 	if err1 != nil {
 		config.Log.Errorf("Error when UPLOAD DCA key %s from slot: %d, error: %q", dcaKey, slotNumber, err1.Error())
@@ -99,17 +100,13 @@ func (r *RealProcessor) processCloseOrder(slotNumber uint, order model.Transacti
 	return nil
 }
 
-func calculateExpirationTime(data model.TransactionData) time.Duration {
-	end := eta(data.InstructionData)
-	return time.Duration(end + 15) * time.Minute
-}
-
-func constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
+func (r *RealProcessor) constructTelegramMessage(transactionData model.TransactionData) model.TelegramDCAOrderMessage {
 	start := time.Now()
 	eta := eta(transactionData.InstructionData)
 	end := start.Add(time.Duration(eta) * time.Minute)
+	symbol := transactionData.TokenSymbol
 	return model.TelegramDCAOrderMessage{
-		Symbol:               transactionData.TokenSymbol,
+		Symbol:               symbol,
 		Operation:            transactionData.Operation.String(),
 		Eta:                  eta,
 		PotencialPriceChange: calculatePriceChange(transactionData.InstructionData),
@@ -119,9 +116,16 @@ func constructTelegramMessage(transactionData model.TransactionData) model.Teleg
 		InAmountPerCycle:     round(transactionData.InstructionData.InAmountPerCycle),
 		PeriodStart:          start.UTC().Format(dateTimeLayout),
 		PeriodEnd:            end.UTC().Format(dateTimeLayout),
-		MexcFutures:          true, // TODO <--
 		Signature:            transactionData.Signature,
+		MexcFutures:          r.TokenFetcher.IsExistsOnMexc(symbol),
+		BitgetFurutes:        r.TokenFetcher.IsExistsOnBitget(symbol),
+		GateFuture:           r.TokenFetcher.IsExistsOnGate(symbol),
 	}
+}
+
+func calculateExpirationTime(data model.TransactionData) time.Duration {
+	end := eta(data.InstructionData)
+	return time.Duration(end+15) * time.Minute
 }
 
 func round(val string) int {

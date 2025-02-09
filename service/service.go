@@ -40,4 +40,15 @@ type RedisCaller[T any, R any] interface {
 
 type TokenFetcher interface {
 	GetTokenInfo(address string) (model.TokenInfo, error)
+	IsExistsOnMexc(symbol string) bool
+	IsExistsOnGate(symbol string) bool
+	IsExistsOnBitget(symbol string) bool
+}
+
+type MexcCaller interface {
+	GetToken(symbol string) (model.MexcTokenInfoResponse[string], error)
+}
+
+type GateCaller interface {
+	GetToken(symbol string) (model.GateTokenInfoResponse, error)
 }
