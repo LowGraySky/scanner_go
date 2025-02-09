@@ -20,7 +20,7 @@ func (gc *RealGateCaller) GetToken(symbol string) (model.GateTokenInfoResponse, 
 	}
 	config.Log.Infof("Got reponse from GATE token info by symbol: '%q', code: %d", symbol, res.StatusCode)
 	if res.StatusCode != 200 {
-		config.Log.Error("Unsuccess repsonse code: %d from GATE by symbol: %s", res.StatusCode, symbol)
+		config.Log.Errorf("Unsuccess repsonse code: %d from GATE by symbol: %s", res.StatusCode, symbol)
 		return model.GateTokenInfoResponse{}, errors.New("token with symbol is not exitst on Gate")
 	}
 	var response model.GateTokenInfoResponse

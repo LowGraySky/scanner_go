@@ -40,13 +40,17 @@ func initProcessor() (*service.RealProcessor, error) {
 		Password: "",
 		DB:       0,
 	})
+	tokenFetcher := &service.RealTokenFetcher{
+		JupiterCaller: &service.RealJupiterCaller{},
+		MexcCaller:    &service.RealMexcCaller{},
+		GateCaller:    &service.RealGateCaller{},
+	}
 	return &service.RealProcessor{
 		Analyser: &service.RealAnalyser{},
 		Serialiser: &service.RealSerializer{
-			TokenFetcher: &service.RealTokenFetcher{
-				JupiterCaller: &service.RealJupiterCaller{},
-			},
+			TokenFetcher: tokenFetcher,
 		},
+		TokenFetcher: tokenFetcher,
 		RedisCaller: &service.RealRedisCaller{
 			RedisClient: *redisClient,
 		},

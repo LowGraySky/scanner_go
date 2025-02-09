@@ -21,6 +21,7 @@ func TestProcessOpenOrder(t *testing.T) {
 		Serialiser:     &service.RealSerializer{
 			TokenFetcher: mockTokenFetcher,
 		},
+		TokenFetcher: mockTokenFetcher,
 		SolanaCaller:   mockSolanaCaller,
 		RedisCaller:    mockRedisCaller,
 		TelegramCaller: mockTelergamCaller,
@@ -44,6 +45,9 @@ func TestProcessOpenOrder(t *testing.T) {
 		DailyVolume: 1.0,
 		Symbol: "ROSS",
 	}, nil)
+	mockTokenFetcher.On("IsExistsOnMexc", mock.Anything).Return(true)
+	mockTokenFetcher.On("IsExistsOnGate", mock.Anything).Return(true)
+	mockTokenFetcher.On("IsExistsOnBitget", mock.Anything).Return(true)
 
 	processor.Process()
 
@@ -136,6 +140,21 @@ type MockTokenFethcer struct {
 func (mtf *MockTokenFethcer) GetTokenInfo(address string) (model.TokenInfo, error) {
 	args := mtf.Called(address)
 	return args.Get(0).(model.TokenInfo), args.Error(1)
+}
+
+func (mtf *MockTokenFethcer) IsExistsOnMexc(symbol string) bool {
+	args := mtf.Called(symbol)
+	return args.Bool(0)
+}
+
+func (mtf *MockTokenFethcer) IsExistsOnGate(symbol string) bool {
+	args := mtf.Called(symbol)
+	return args.Bool(0)
+}
+
+func (mtf *MockTokenFethcer) IsExistsOnBitget(symbol string) bool {
+	args := mtf.Called(symbol)
+	return args.Bool(0)
 }
 
 type MockSolanaCaller struct {

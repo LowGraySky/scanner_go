@@ -32,7 +32,9 @@ func (sc *RealSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
 		Id: IdValue,
 		Method: GetSlotMethodName,
 	}
-	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
+	reader := toJsonIoReader(rpcCall)
+	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, reader)
+	defer reader.Close()
 	if err != nil {
 		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q", GetSlotMethodName, err.Error())
 		return model.GetSlotResponseBody{}, err
@@ -40,6 +42,7 @@ func (sc *RealSolanaCaller) GetSlot() (model.GetSlotResponseBody, error) {
 	config.Log.Infof("Got reponse from solana RPC, method: '%q', code: %d", GetSlotMethodName, res.StatusCode)
 	var slotResponse model.GetSlotResponseBody
 	readResponseBody(res.Body, &slotResponse)
+	defer res.Body.Close()
 	config.Log.Infof("Response body: %q", slotResponse)
 	return slotResponse, nil
 }
@@ -51,7 +54,9 @@ func (sc *RealSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBod
 		Method: GetBlockMethodName,
 		Params: []interface{}{ slotNumber, defaultGetBlockParamsBody },
 	}
-	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, toJsonIoReader(rpcCall))
+	reader := toJsonIoReader(rpcCall)
+	res, err := http.Post(SolanaNodeBaseUrl, ApplicationJsonContentType, reader)
+	defer reader.Close()
 	if err != nil {
 		config.Log.Errorf("Error when request to solana RPC, method: '%q', error: %q\n", GetBlockMethodName, err.Error())
 		return model.GetBlockResponseBody{}, err
@@ -59,6 +64,7 @@ func (sc *RealSolanaCaller) GetBlock(slotNumber uint) (model.GetBlockResponseBod
 	config.Log.Infof("Got reponse from solana RPC, method: '%q', code: %d", GetBlockMethodName, res.StatusCode)
 	var blockResponse model.GetBlockResponseBody
 	readResponseBody(res.Body, &blockResponse)
+	defer res.Body.Close()
 	return blockResponse, nil
 }
 
@@ -73,10 +79,11 @@ func readResponseBody[T any](closer io.ReadCloser, t T) {
 	}
 }
 
-func toJsonIoReader(v any) io.Reader {
+func toJsonIoReader(v any) io.ReadCloser {
 	res, err := json.Marshal(v)
 	if err != nil {
 		config.Log.Errorf("Error when convert value: %q to json, error: %q\n", v, err.Error())
 	}
-	return bytes.NewBuffer(res)
+	 reader := bytes.NewReader(res)
+	 return io.NopCloser(reader)
 }
