@@ -46,7 +46,7 @@ type TokenFetcher interface {
 }
 
 type MexcCaller interface {
-	GetToken(symbol string) (model.MexcTokenInfoResponse[string], error)
+	GetToken(symbol string) (model.MexcTokenInfoResponse, error)
 }
 
 type GateCaller interface {

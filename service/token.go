@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
 )
@@ -61,7 +62,7 @@ func (tf *RealTokenFetcher) IsExistsOnBitget(symbol string) bool {
 }
 
 func (tf *RealTokenFetcher) IsExistsOnGate(symbol string) bool {
-	symbolGate := symbol + "_USDT"
+	symbolGate := strings.ToUpper(symbol) + "_USDT"
 	_, err := tf.GateCaller.GetToken(symbolGate)
 	if err != nil {
 		config.Log.Errorf("NOT FOUND token: %s on GATE", symbol)
