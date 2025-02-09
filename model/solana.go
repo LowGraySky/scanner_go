@@ -86,7 +86,12 @@ func (m *Meta) IsOpenDca() bool {
 func (m *Meta) GetTokenAddress() []string  {
 	tokens := make([]string, 2)
 	tokens[0] = m.PostTokenBalances[0].Mint
-	tokens[1] = m.PostTokenBalances[1].Mint
+	for _, t := range m.PostTokenBalances {
+		if t.Mint != tokens[0] {
+			tokens[1] = t.Mint
+			return tokens
+		}
+	}
 	return tokens
 }
 

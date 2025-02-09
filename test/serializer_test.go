@@ -34,7 +34,7 @@ func TestSerializer(t *testing.T) {
 	}
 }
 
-func TestSerializerCorrectSumbolAndOperation1(t *testing.T)  {
+func TestSerializerCorrectSymbolAndOperation1(t *testing.T)  {
 	serializer := service.RealSerializer{
 		TokenFetcher: &service.RealTokenFetcher{
 			JupiterCaller: &service.RealJupiterCaller{},
@@ -62,7 +62,7 @@ func TestSerializerCorrectSumbolAndOperation1(t *testing.T)  {
 	}
 }
 
-func TestSerializerCorrectSumbolAndOperation2(t *testing.T)  {
+func TestSerializerCorrectSymbolAndOperation2(t *testing.T)  {
 	serializer := service.RealSerializer{
 		TokenFetcher: &service.RealTokenFetcher{
 			JupiterCaller: &service.RealJupiterCaller{},
@@ -83,6 +83,34 @@ func TestSerializerCorrectSumbolAndOperation2(t *testing.T)  {
 	opee := assert.Equal(t, res.Operation.String(), "BUY")
 	usae := assert.Equal(t, res.User, "BNJWKsPtEgpRz7XDyKXbKmmBQeZ8UubGR81W9fM3Y5uC")
 	se := assert.Equal(t, res.Signature, "3QYNmrAWAJq6ka93msKGgGgLfUJgenLe3n3BpksUqa57HzsByhU8zsZ3YkH9H6Q85kiijtcW7LPV18zUC1Ya1smM")
+
+	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se && dke
+	if !r {
+		t.Error("")
+	}
+}
+
+func TestSerializerCorrectSymbolAndOperation3(t *testing.T)  {
+	serializer := service.RealSerializer{
+		TokenFetcher: &service.RealTokenFetcher{
+			JupiterCaller: &service.RealJupiterCaller{},
+		},
+	}
+	transactions := ReadBlockResponseFromFile("files/test_data_s_and_op3.txt").Result.Transactions
+
+	actual, _ := serializer.Serialize(1, transactions[0])
+
+	res := actual
+
+	dke := assert.Equal(t, res.DcaKey, "EZSRPqvbWjH3YX3zgkjW9H2WugNMyyau2U652WusaNwv")
+	ame := assert.Equal(t, res.InstructionData.InAmount, "25000000000")
+	ampe := assert.Equal(t, res.InstructionData.InAmountPerCycle, "500000000")
+	cfe := assert.Equal(t, res.InstructionData.CycleFrequency, "60")
+	tkcae := assert.Equal(t, res.Token, "FHKiJEg2zmhv9DEeaXMSZa7R4P8BPFX5VTRrzrtJpump")
+	tksymbe := assert.Equal(t, res.TokenSymbol, "HIBER")
+	opee := assert.Equal(t, res.Operation.String(), "BUY")
+	usae := assert.Equal(t, res.User, "HTpoBRnq1fv7AzDgWi6VULf2TCdGkseNdMqoCJJZcS9y")
+	se := assert.Equal(t, res.Signature, "5z4TN1K3UCAAipRSW4i815R6ZSVj98TbDDpoxeWxER6K2dYyq171JDcJZZWZnR4SNm3xC1x3QW8oUwz4ksR1cN3b")
 
 	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se && dke
 	if !r {
