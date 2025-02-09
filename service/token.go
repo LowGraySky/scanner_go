@@ -43,14 +43,14 @@ func (tf *RealTokenFetcher) IsExistsOnMexc(symbol string) bool {
 		return false
 	}
 	if resp.IsNotExistst() {
-		config.Log.Warn("NOT FOUND token: %s on MEXC", symbol)
+		config.Log.Warnf("NOT FOUND token: %s on MEXC", symbol)
 		return false
 	}
 	if resp.IsSuccess() {
 		config.Log.Infof("FOUND token: %s on MEXC", symbol)
 		return true
 	} else {
-		config.Log.Warn("NOT FOUND token: %s on MEXC, data: %s", symbol, fmt.Sprintf("Success: %s, Code: %d", resp.Success, resp.Code))
+		config.Log.Warnf("NOT FOUND token: %s on MEXC, data: %s", symbol, fmt.Sprintf("Success: %s, Code: %d", resp.Success, resp.Code))
 		return false
 	}
 }
@@ -67,6 +67,6 @@ func (tf *RealTokenFetcher) IsExistsOnGate(symbol string) bool {
 		config.Log.Errorf("NOT FOUND token: %s on GATE", symbol)
 		return false
 	}
-	config.Log.Info("FOUND token: %s on GATE", symbol)
+	config.Log.Infof("FOUND token: %s on GATE", symbol)
 	return true
 }

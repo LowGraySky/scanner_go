@@ -18,6 +18,7 @@ func TestSerializer(t *testing.T) {
 
 	res := actual
 
+	dke := assert.Equal(t, res.DcaKey, "DG5XkaGPGVywyygWxWBCLycmh7QDW6J6pToJeQqCFwPr")
 	ame := assert.Equal(t, res.InstructionData.InAmount, "8272121570535")
 	ampe := assert.Equal(t, res.InstructionData.InAmountPerCycle, "33088486282")
 	cfe := assert.Equal(t, res.InstructionData.CycleFrequency, "60")
@@ -27,7 +28,63 @@ func TestSerializer(t *testing.T) {
 	usae := assert.Equal(t, res.User, "7DiaCzvNmMcA7z8J3McC3VaUDJJTdKPQCd9YTAThSTaY")
 	se := assert.Equal(t, res.Signature, "4LFqsgwRWWsQpcy3P9ZxmxQo8dX5fob8oU9Zs71VbSWbt8rnc7ovXdnCx9U2N3khxZogLCpyPbsKiZ5Nsr1GYv7k")
 
-	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se
+	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se && dke
+	if !r {
+		t.Error("")
+	}
+}
+
+func TestSerializerCorrectSumbolAndOperation1(t *testing.T)  {
+	serializer := service.RealSerializer{
+		TokenFetcher: &service.RealTokenFetcher{
+			JupiterCaller: &service.RealJupiterCaller{},
+		},
+	}
+	transactions := ReadBlockResponseFromFile("files/test_data_s_and_op1.txt ").Result.Transactions
+
+	actual, _ := serializer.Serialize(1, transactions[0])
+
+	res := actual
+
+	dke := assert.Equal(t, res.DcaKey, "4FY3uWuRN16Tnq4GQNrTnmCmwYvBFsKZc2SKv2Qum6Q4")
+	ame := assert.Equal(t, res.InstructionData.InAmount, "23048316276")
+	ampe := assert.Equal(t, res.InstructionData.InAmountPerCycle, "1152415814")
+	cfe := assert.Equal(t, res.InstructionData.CycleFrequency, "60")
+	tkcae := assert.Equal(t, res.Token, "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN")
+	tksymbe := assert.Equal(t, res.TokenSymbol, "TRUMP")
+	opee := assert.Equal(t, res.Operation.String(), "SELL")
+	usae := assert.Equal(t, res.User, "Af1gwGFchrcKojHrmL9yhcqC89kURuahCmYvCBnq9oKU")
+	se := assert.Equal(t, res.Signature, "3tiXLgrpgTNUkTrspZ8HzfKhEy5Ngw8ZwewKrGNyS23zN68XTh9sa5cL6rN9fvccW67i1UoQQjaN6djpnGXfMhNX")
+
+	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se && dke
+	if !r {
+		t.Error("")
+	}
+}
+
+func TestSerializerCorrectSumbolAndOperation2(t *testing.T)  {
+	serializer := service.RealSerializer{
+		TokenFetcher: &service.RealTokenFetcher{
+			JupiterCaller: &service.RealJupiterCaller{},
+		},
+	}
+	transactions := ReadBlockResponseFromFile("files/test_data_s_and_op2.txt").Result.Transactions
+
+	actual, _ := serializer.Serialize(1, transactions[0])
+
+	res := actual
+
+	dke := assert.Equal(t, res.DcaKey, "AASzrsLMPCDDtw1zzJUiYrrc198CaUtxaQQjc7L48NMs")
+	ame := assert.Equal(t, res.InstructionData.InAmount, "500000000000")
+	ampe := assert.Equal(t, res.InstructionData.InAmountPerCycle, "1858736059")
+	cfe := assert.Equal(t, res.InstructionData.CycleFrequency, "60")
+	tkcae := assert.Equal(t, res.Token, "AxriehR6Xw3adzHopnvMn7GcpRFcD41ddpiTWMg6pump")
+	tksymbe := assert.Equal(t, res.TokenSymbol, "jailstool")
+	opee := assert.Equal(t, res.Operation.String(), "BUY")
+	usae := assert.Equal(t, res.User, "BNJWKsPtEgpRz7XDyKXbKmmBQeZ8UubGR81W9fM3Y5uC")
+	se := assert.Equal(t, res.Signature, "3QYNmrAWAJq6ka93msKGgGgLfUJgenLe3n3BpksUqa57HzsByhU8zsZ3YkH9H6Q85kiijtcW7LPV18zUC1Ya1smM")
+
+	r := ame && ampe && cfe && tkcae && tksymbe && opee && usae && se && dke
 	if !r {
 		t.Error("")
 	}
