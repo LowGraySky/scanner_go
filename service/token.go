@@ -36,7 +36,7 @@ func (tf *RealTokenFetcher) isExistsInAnswerMap(address string) bool {
 }
 
 func (tf *RealTokenFetcher) IsExistsOnMexc(symbol string) bool {
-	mexcSymbol := symbol + "_USD"
+	mexcSymbol := symbol + "_USDT"
 	resp, err := tf.MexcCaller.GetToken(mexcSymbol)
 	if err != nil {
 		config.Log.Errorf("Error when find token %s on MEXC, error: %q", symbol, err.Error())

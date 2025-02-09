@@ -12,7 +12,7 @@ const mexcBaseUrl = "https://contract.mexc.com/api/v1/contract/detail"
 type RealMexcCaller struct{}
 
 func (mc *RealMexcCaller) GetToken(symbol string) (model.MexcTokenInfoResponse[string], error) {
-	res, err := http.Get(mexcBaseUrl + "/?symbol=" + symbol)
+	res, err := http.Get(mexcBaseUrl + "?symbol=" + symbol)
 	if err != nil {
 		config.Log.Errorf("Error when request to MEXC token info by symbol: %s, error: %q", symbol, err.Error())
 		return model.MexcTokenInfoResponse[string]{}, err
