@@ -52,3 +52,7 @@ type MexcCaller interface {
 type GateCaller interface {
 	GetToken(symbol string) (model.GateTokenInfoResponse, error)
 }
+
+type TokenRepository interface {
+	
+}
