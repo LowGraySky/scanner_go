@@ -40,9 +40,7 @@ type RedisCaller[T any, R any] interface {
 
 type TokenFetcher interface {
 	GetTokenInfo(address string) (model.TokenInfo, error)
-	IsExistsOnMexc(symbol string) bool
-	IsExistsOnGate(symbol string) bool
-	IsExistsOnBitget(symbol string) bool
+	ExchangeTokenInfo(symbol string) model.Token
 }
 
 type MexcCaller interface {
@@ -54,5 +52,8 @@ type GateCaller interface {
 }
 
 type TokenRepository interface {
-	
+	UpdateExchangeTokenInfo(token model.Token) error
+	SaveJupiterToken(address string, symbol string) error
+	ExchangeTokenInfo(symbol string) (bool, model.Token, error)
+	JupiterTokenByAddress(address string) (bool, string, error)
 }

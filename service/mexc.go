@@ -20,6 +20,6 @@ func (mc *RealMexcCaller) GetToken(symbol string) (model.MexcTokenInfoResponse, 
 	config.Log.Infof("Got reponse from MEXC token info by symbol: '%q', code: %d", symbol, res.StatusCode)
 	var response model.MexcTokenInfoResponse
 	readResponseBody(res.Body, &response)
-	config.Log.Infof("Response body: %s", fmt.Sprintf("Success: %t, Code: %d", response.Success, response.Code))
+	config.Log.Infof("Response body: " + fmt.Sprintf("Success: %t, Code: %d", response.Success, response.Code))
 	return response, nil
 }

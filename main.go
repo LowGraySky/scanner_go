@@ -34,7 +34,7 @@ func schedule() {
 	}
 	defer db.Close()
 	defer ticker.Stop()
-	processor, err1 := initProcessor()
+	processor, err1 := initProcessor(db)
 	if err1 != nil {
 		return
 	}
@@ -49,9 +49,7 @@ func applyMigrations() (*sql.DB, error) {
 		config.Log.Errorf("Error when connect to database, error: %q", err.Error())
 		return nil, err
 	}
-	driver, err1 := pgx.WithInstance(conn, &pgx.Config{
-
-	})
+	driver, err1 := pgx.WithInstance(conn, &pgx.Config{})
 	if err1 != nil {
 		config.Log.Errorf("Error when creating driver, error: %q", err1.Error())
 		return nil, err1
@@ -72,7 +70,7 @@ func applyMigrations() (*sql.DB, error) {
 	return conn, nil
 }
 
-func initProcessor() (*service.RealProcessor, error) {
+func initProcessor(db *sql.DB) (*service.RealProcessor, error) {
 	bot, err := gotgbot.NewBot(telegramBotToken, nil)
 	if err != nil {
 		config.Log.Errorf("Error when statring telegram bot, error: %q", err.Error())
@@ -87,6 +85,9 @@ func initProcessor() (*service.RealProcessor, error) {
 		JupiterCaller: &service.RealJupiterCaller{},
 		MexcCaller:    &service.RealMexcCaller{},
 		GateCaller:    &service.RealGateCaller{},
+		TokenRepository: &service.RealTokenRepository{
+			Db: *db,
+		},
 	}
 	return &service.RealProcessor{
 		Analyser: &service.RealAnalyser{},

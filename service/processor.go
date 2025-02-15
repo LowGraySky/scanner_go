@@ -107,6 +107,7 @@ func (r *RealProcessor) constructTelegramMessage(transactionData model.Transacti
 	eta := eta(transactionData.InstructionData)
 	end := start.Add(time.Duration(eta) * time.Minute)
 	symbol := transactionData.TokenSymbol
+	tokenInfo := r.TokenFetcher.ExchangeTokenInfo(symbol)
 	return model.TelegramDCAOrderMessage{
 		Symbol:               symbol,
 		Operation:            transactionData.Operation.String(),
@@ -119,9 +120,9 @@ func (r *RealProcessor) constructTelegramMessage(transactionData model.Transacti
 		PeriodStart:          start.UTC().Format(dateTimeLayout),
 		PeriodEnd:            end.UTC().Format(dateTimeLayout),
 		Signature:            transactionData.Signature,
-		MexcFutures:          r.TokenFetcher.IsExistsOnMexc(symbol),
-		BitgetFurutes:        r.TokenFetcher.IsExistsOnBitget(symbol),
-		GateFuture:           r.TokenFetcher.IsExistsOnGate(symbol),
+		MexcFutures:          tokenInfo.IsExistsMexc.Bool,
+		BitgetFurutes:        tokenInfo.IsExistsBitget.Bool,
+		GateFuture:           tokenInfo.IsExistsGate.Bool,
 	}
 }
 

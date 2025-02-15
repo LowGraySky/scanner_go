@@ -15,7 +15,7 @@ func TestProcessOpenOrder(t *testing.T) {
 	mockRedisCaller := new(MockRedisCaller)
 	mockAnalyser := new(MockAnalyser)
 	mockTelergamCaller := new(MockTelegramCaller)
-	mockTokenFetcher := new(MockTokenFethcer)
+	mockTokenFetcher := new(MockTokenFetcher)
 	processor := service.RealProcessor{
 		Analyser:       mockAnalyser,
 		Serialiser:     &service.RealSerializer{
@@ -42,12 +42,9 @@ func TestProcessOpenOrder(t *testing.T) {
 	mockTelergamCaller.On("SendMessage", mock.Anything).Return(&gotgbot.Message{MessageId: 1}, nil)
 	mockRedisCaller.On("Set", mock.Anything, "DG5XkaGPGVywyygWxWBCLycmh7QDW6J6pToJeQqCFwPr", int64(1), mock.Anything).Return(nil)
 	mockTokenFetcher.On("GetTokenInfo", "DVZrNS9fctrrDmhZUZAu6p63xU6d9cqYxRRhJbtJ4z8G").Return(model.TokenInfo{
-		DailyVolume: 1.0,
 		Symbol: "ROSS",
 	}, nil)
-	mockTokenFetcher.On("IsExistsOnMexc", mock.Anything).Return(true)
-	mockTokenFetcher.On("IsExistsOnGate", mock.Anything).Return(true)
-	mockTokenFetcher.On("IsExistsOnBitget", mock.Anything).Return(true)
+	mockTokenFetcher.On().Return()
 
 	processor.Process()
 
@@ -133,28 +130,18 @@ func (mr *MockRedisCaller) Set(ctx context.Context, key string, value int64, exp
 	return args.Error(0)
 }
 
-type MockTokenFethcer struct {
+type MockTokenFetcher struct {
 	mock.Mock
 }
 
-func (mtf *MockTokenFethcer) GetTokenInfo(address string) (model.TokenInfo, error) {
+func (mtf *MockTokenFetcher) GetTokenInfo(address string) (model.TokenInfo, error) {
 	args := mtf.Called(address)
 	return args.Get(0).(model.TokenInfo), args.Error(1)
 }
 
-func (mtf *MockTokenFethcer) IsExistsOnMexc(symbol string) bool {
+func (mtf *MockTokenFetcher) ExchangeTokenInfo(symbol string) model.Token {
 	args := mtf.Called(symbol)
-	return args.Bool(0)
-}
-
-func (mtf *MockTokenFethcer) IsExistsOnGate(symbol string) bool {
-	args := mtf.Called(symbol)
-	return args.Bool(0)
-}
-
-func (mtf *MockTokenFethcer) IsExistsOnBitget(symbol string) bool {
-	args := mtf.Called(symbol)
-	return args.Bool(0)
+	return args.Get(0).(model.Token)
 }
 
 type MockSolanaCaller struct {

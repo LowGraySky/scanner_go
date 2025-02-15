@@ -18,13 +18,13 @@ func (gc *RealGateCaller) GetToken(symbol string) (model.GateTokenInfoResponse, 
 		config.Log.Errorf("Error when request to GATE token info by symbol: %s, error: %q", symbol, err.Error())
 		return model.GateTokenInfoResponse{}, err
 	}
-	config.Log.Infof("Got reponse from GATE token info by symbol: '%q', code: %d", symbol, res.StatusCode)
+	config.Log.Infof("Got reponse from GATE token info by symbol: '%s', code: %d", symbol, res.StatusCode)
 	if res.StatusCode != 200 {
 		config.Log.Errorf("Unsuccess repsonse code: %d from GATE by symbol: %s", res.StatusCode, symbol)
 		return model.GateTokenInfoResponse{}, errors.New("token with symbol is not exitst on Gate")
 	}
 	var response model.GateTokenInfoResponse
 	readResponseBody(res.Body, &response)
-	config.Log.Infof("Response body: %s", fmt.Sprintf("Name: %s", response.Name))
+	config.Log.Infof("Response body: " + fmt.Sprintf("Name: %s", response.Name))
 	return response, nil
 }
