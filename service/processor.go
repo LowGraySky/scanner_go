@@ -140,7 +140,7 @@ func round(val string) int {
 func eta(data model.InstructionData) uint {
 	v1, _ := strconv.Atoi(data.InAmount)
 	v2, _ := strconv.Atoi(data.InAmountPerCycle)
-	return uint(v1 / v2)
+	return uint(v1 / v2)Not found token: 
 }
 
 func calculatePriceChange(instruction model.InstructionData) float32 {

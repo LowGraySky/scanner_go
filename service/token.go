@@ -141,7 +141,7 @@ func (tf *RealTokenFetcher) IsExistsOnBitget(symbol string) (bool, error) {
 		config.Log.Infof("Found token: %s on BITGET", symbol)
 		return true, nil
 	} else {
-		config.Log.Warnf("Not found token: %s on BITGET, data: %s", symbol, fmt.Sprintf("Code: %s, Msg: %d", res.Code, res.Message))
+		config.Log.Warnf("Not found token: %s on BITGET, data: %s", symbol, fmt.Sprintf("Code: %s, Msg: %s", res.Code, res.Message))
 		return false, nil
 	}
 }

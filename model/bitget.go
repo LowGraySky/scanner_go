@@ -1,7 +1,7 @@
 package model
 
 const (
-  successCode = "0000"
+  successCode = "00000"
   successMessage = "success"
   tokenNotExistCode = "40034"
 )
