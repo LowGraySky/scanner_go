@@ -2,6 +2,7 @@ package test
 
 import (
 	"context"
+	"database/sql"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/stretchr/testify/mock"
 	"testing"
@@ -44,7 +45,19 @@ func TestProcessOpenOrder(t *testing.T) {
 	mockTokenFetcher.On("GetTokenInfo", "DVZrNS9fctrrDmhZUZAu6p63xU6d9cqYxRRhJbtJ4z8G").Return(model.TokenInfo{
 		Symbol: "ROSS",
 	}, nil)
-	mockTokenFetcher.On().Return()
+	mockTokenFetcher.On("ExchangeTokenInfo", "ROSS").Return(
+		model.Token{
+			Symbol: "ROSS",
+			IsExistsBitget: sql.NullBool{
+				Bool: true,
+			},
+			IsExistsGate: sql.NullBool{
+				Bool: false,
+			},
+			IsExistsMexc: sql.NullBool{
+				Bool: false,
+			},
+	})
 
 	processor.Process()
 
