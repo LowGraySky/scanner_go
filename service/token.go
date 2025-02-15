@@ -71,16 +71,10 @@ func (tf *RealTokenFetcher) fetchInfoAbountToken(symbol string) (model.Token, er
 	}()
 	go func() {
 		defer wg.Done()
-		ex, err := tf.IsExistsOnBitget(symbol)
-		if err != nil {
-			bitget = sql.NullBool{
-				Valid: false,
-			}
-		} else {
-			bitget = sql.NullBool{
-				Bool:  ex,
-				Valid: true,
-			}
+		ex, _ := tf.IsExistsOnBitget(symbol)
+		bitget = sql.NullBool{
+			Bool:  ex,
+			Valid: true,
 		}
 	}()
 	go func() {
@@ -99,10 +93,10 @@ func (tf *RealTokenFetcher) fetchInfoAbountToken(symbol string) (model.Token, er
 	}()
 	wg.Wait()
 	token := model.Token{
-		Symbol:       symbol,
-		IsExistsMexc: mexc,
+		Symbol:         symbol,
+		IsExistsMexc:   mexc,
 		IsExistsBitget: bitget,
-		IsExistsGate: gate,
+		IsExistsGate:   gate,
 	}
 	err := tf.TokenRepository.InsertOrUpdateTokenInfo(token)
 	if err != nil {
