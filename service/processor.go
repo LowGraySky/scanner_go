@@ -47,13 +47,13 @@ func (r *RealProcessor) Process() {
 
 func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.GetBlockResponseBody, error) {
 	block, _ := r.SolanaCaller.GetBlock(slotNumber)
-	if block.Error.Code != 0 && block.Error.Message != "" {
-		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
-		return model.GetBlockResponseBody{}, errors.New("unsuccess request")
-	}
 	if block.Error.Code == -32004 {
 		config.Log.Info("Block not available for slot: %d, retry request", slotNumber)
 		return r.SolanaCaller.GetBlock(slotNumber)
+	}
+	if block.Error.Code != 0 && block.Error.Message != "" {
+		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
+		return model.GetBlockResponseBody{}, errors.New("unsuccess request")
 	}
 	return block, nil
 }
