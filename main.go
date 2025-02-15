@@ -85,7 +85,7 @@ func initProcessor(db *sql.DB) (*service.RealProcessor, error) {
 		JupiterCaller: &service.RealJupiterCaller{},
 		MexcCaller:    &service.RealMexcCaller{},
 		GateCaller:    &service.RealGateCaller{},
-		BitgetCaller: &service.RealBitgetCaller{},
+		BitgetCaller:  &service.RealBitgetCaller{},
 		TokenRepository: &service.RealTokenRepository{
 			Db: *db,
 		},
