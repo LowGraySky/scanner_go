@@ -51,6 +51,10 @@ type GateCaller interface {
 	GetToken(symbol string) (model.GateTokenInfoResponse, error)
 }
 
+type BitgetCaller interface {
+	GetToken(symbol string) (model.GateResponse, error)
+}
+
 type TokenRepository interface {
 	InsertOrUpdateTokenInfo(token model.Token) error
 	SaveJupiterToken(address string, symbol string) error
