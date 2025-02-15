@@ -2,7 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -91,12 +90,12 @@ func (tf *RealTokenFetcher) fetchInfoAbountToken(symbol string) (model.Token, er
 		},
 		IsExistsGate: gate,
 	}
-	err := tf.TokenRepository.UpdateExchangeTokenInfo(token)
+	err := tf.TokenRepository.InsertOrUpdateTokenInfo(token)
 	if err != nil {
 		return model.Token{}, err
 	}
+	config.Log.Infof("Success update info in repository by token: %s", symbol)
 	return token, nil
-
 }
 
 func (tf *RealTokenFetcher) IsExistsOnMexc(symbol string) (bool, error) {
@@ -115,7 +114,7 @@ func (tf *RealTokenFetcher) IsExistsOnMexc(symbol string) (bool, error) {
 		return true, nil
 	} else {
 		config.Log.Warnf("Not found token: %s on MEXC, data: %s", symbol, fmt.Sprintf("Success: %s, Code: %d", resp.Success, resp.Code))
-		return false, errors.New("error to call")
+		return false, nil
 	}
 }
 
@@ -129,7 +128,7 @@ func (tf *RealTokenFetcher) IsExistsOnGate(symbol string) (bool, error) {
 	_, err := tf.GateCaller.GetToken(symbolGate)
 	if err != nil {
 		config.Log.Errorf("Not found token: %s on GATE", symbol)
-		return false, err
+		return false, nil
 	}
 	config.Log.Infof("Found token: %s on GATE", symbol)
 	return true, nil

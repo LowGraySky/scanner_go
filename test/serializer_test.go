@@ -136,7 +136,7 @@ type MockTokenRepository struct {
 	mock.Mock
 }
 
-func (r *MockTokenRepository) UpdateExchangeTokenInfo(token model.Token) error {
+func (r *MockTokenRepository) InsertOrUpdateTokenInfo(token model.Token) error {
 	args := r.Called(token)
 	return args.Error(0)
 }

@@ -52,7 +52,7 @@ type GateCaller interface {
 }
 
 type TokenRepository interface {
-	UpdateExchangeTokenInfo(token model.Token) error
+	InsertOrUpdateTokenInfo(token model.Token) error
 	SaveJupiterToken(address string, symbol string) error
 	ExchangeTokenInfo(symbol string) (bool, model.Token, error)
 	JupiterTokenByAddress(address string) (bool, string, error)

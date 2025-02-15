@@ -46,13 +46,18 @@ func (tr *RealTokenRepository) ExchangeTokenInfo(symbol string) (bool, model.Tok
 	}, nil
 }
 
-func (tr *RealTokenRepository) UpdateExchangeTokenInfo(token model.Token) error {
-	_, err := tr.Db.Exec(
-		"update dca.token_info(is_exists_on_mexc, is_exists_on_bitget, is_exists_on_gate) set ($1, $2, $3) where symbol = $4",
+func (tr *RealTokenRepository) InsertOrUpdateTokenInfo(token model.Token) error {
+	_, err := tr.Db.Exec(`INSERT INTO dca.token_info
+(symbol, is_exists_on_mexc, is_exists_on_bitget, is_exists_on_gate)
+VALUES ($1, $2, $3, $4)
+	ON CONFLICT (symbol) DO UPDATE
+	SET is_exists_on_mexc = $2,
+		is_exists_on_bitget = $3,
+		is_exists_on_gate = $4;`,
+		token.Symbol,
 		token.IsExistsMexc,
 		token.IsExistsBitget,
-		token.IsExistsGate,
-		token.Symbol)
+		token.IsExistsGate)
 	if err != nil {
 		return err
 	}
