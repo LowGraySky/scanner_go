@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"time"
 	"web3.kz/solscan/config"
@@ -32,9 +33,8 @@ func (r *RealProcessor) Process() {
 	}
 	slotNumber := slot.Result
 	config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
-	block, _ := r.SolanaCaller.GetBlock(slotNumber)
-	if block.Error.Code != 0 && block.Error.Message != "" {
-		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
+	block, err := r.getBlockWithRetryIfNotAvailbale(slotNumber)
+	if err != nil {
 		return
 	}
 	orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
@@ -43,6 +43,19 @@ func (r *RealProcessor) Process() {
 	} else {
 		r.processTransactions(slotNumber, orders)
 	}
+}
+
+func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.GetBlockResponseBody, error) {
+	block, _ := r.SolanaCaller.GetBlock(slotNumber)
+	if block.Error.Code != 0 && block.Error.Message != "" {
+		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
+		return model.GetBlockResponseBody{}, errors.New("unsuccess request")
+	}
+	if block.Error.Code == -32004 {
+		config.Log.Info("Block not available for slot: %d, retry request", slotNumber)
+		return r.SolanaCaller.GetBlock(slotNumber)
+	}
+	return block, nil
 }
 
 func (r *RealProcessor) processTransactions(slotNumber uint, orders []model.Transaction) {
