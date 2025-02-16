@@ -19,16 +19,26 @@ const (
 	database         = "postgres://postgres:1122@localhost:5432/postgres?sslmode=disable"
 )
 
+var redisOptions = redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+}
+
 func main() {
 	db, err := applyMigrations()
 	if err != nil {
+		config.Log.Fatalf("Error when apply migrations, error: %q", err.Error())
 		return
 	}
 	defer db.Close()
-	processor, err1 := initProcessor(db)
+	bot, err1 := gotgbot.NewBot(telegramBotToken, nil)
 	if err1 != nil {
+		config.Log.Fatalf("Error when statring telegram bot, error: %q", err1.Error())
 		return
 	}
+	redisClient := redis.NewClient(&redisOptions)
+	processor := initProcessor(db, bot, redisClient)
 	pool := service.RealExecutorPool{
 		ExecutorsCount: 5,
 		Processor:      processor,
@@ -63,17 +73,7 @@ func applyMigrations() (*sql.DB, error) {
 	return conn, nil
 }
 
-func initProcessor(db *sql.DB) (*service.RealProcessor, error) {
-	bot, err := gotgbot.NewBot(telegramBotToken, nil)
-	if err != nil {
-		config.Log.Errorf("Error when statring telegram bot, error: %q", err.Error())
-		return &service.RealProcessor{}, err
-	}
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
+func initProcessor(db *sql.DB, bot *gotgbot.Bot, redisClient *redis.Client) *service.RealProcessor {
 	tokenFetcher := &service.RealTokenFetcher{
 		JupiterCaller: &service.RealJupiterCaller{},
 		MexcCaller:    &service.RealMexcCaller{},
@@ -96,5 +96,5 @@ func initProcessor(db *sql.DB) (*service.RealProcessor, error) {
 		TelegramCaller: &service.RealTelegramCaller{
 			Bot: *bot,
 		},
-	}, nil
+	}
 }
