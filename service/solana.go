@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	SolanaNodeBaseUrl          = "https://api.mainnet-beta.solana.com"
+	SolanaNodeBaseUrl          = "https://solana-mainnet.g.alchemy.com/v2/AT8Nj54Fcwv-ezshyh3DgkJv7CgFCE_a"
 	ApplicationJsonContentType = "application/json"
 	JsonRpcValue = "2.0"
 	IdValue = 1

@@ -7,6 +7,10 @@ import (
 	"web3.kz/solscan/model"
 )
 
+type ExecutorPool interface {
+	Execute()
+}
+
 type Processor interface {
 	Process()
 }
