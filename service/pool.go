@@ -2,13 +2,13 @@ package service
 
 import (
 	"sync"
+	"time"
 	"web3.kz/solscan/config"
 )
 
 type RealExecutorPool struct {
 	ExecutorsCount int
 	Processor      Processor
-	TaskQueue      chan Task
 }
 
 type Task func()
@@ -18,31 +18,46 @@ type Worker struct {
 	JobQueue chan Task
 }
 
-func (w *Worker) Run(wg *sync.WaitGroup) {
+var wg sync.WaitGroup
+
+func (w *Worker) Run() {
 	go func() {
-		defer wg.Done()
-		task := <-w.JobQueue
-		config.Log.Infof("Worker-%d start execute task", w.Id)
-		task()
+		for task := range w.JobQueue {
+			config.Log.Debugf("Worker-%d start execute task", w.Id)
+			task()
+			wg.Done()
+		}
 	}()
 }
 
 func (ep *RealExecutorPool) Execute() {
-	var wg sync.WaitGroup
-
-	workers := make([]Worker, ep.ExecutorsCount)
-
-	for i := 0; i < len(workers); i++ {
-		workers = append(workers, Worker{
+	taskQueue := make(chan Task)
+	workers := make([]Worker, 5)
+	for i := 1; i <= 5; i++ {
+		workers[i-1] = Worker{
 			Id:       uint(i),
-			JobQueue: ep.TaskQueue,
-		})
+			JobQueue: taskQueue,
+		}
 	}
-
 	for _, w := range workers {
-		wg.Add(1)
-		w.Run(&wg)
+		w.Run()
 	}
-
+	go ep.schedule(taskQueue)
 	wg.Wait()
+	select {}
+}
+
+func (ep *RealExecutorPool) schedule(taskQueue chan Task) {
+	config.Log.Info("Start analyse task")
+	ticker := time.NewTicker(500 * time.Millisecond)
+
+	defer ticker.Stop()
+
+	for range ticker.C {
+		wg.Add(1)
+		config.Log.Debugf("<- Append task to queue")
+		taskQueue <- func() {
+			ep.Processor.Process()
+		}
+	}
 }

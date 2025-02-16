@@ -9,9 +9,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/pgx"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"sync"
 	_ "sync"
-	"time"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/service"
 )
@@ -27,66 +25,16 @@ func main() {
 		return
 	}
 	defer db.Close()
-
 	processor, err1 := initProcessor(db)
 	if err1 != nil {
 		return
 	}
-
-	taskQueue := make(chan service.Task)
-
-	workers := make([]service.Worker, 5)
-
-	for i := 1; i <= 5; i++ {
-		workers[i-1] = service.Worker{
-			Id:       uint(i),
-			JobQueue: taskQueue,
-		}
+	pool := service.RealExecutorPool{
+		ExecutorsCount: 5,
+		Processor:      processor,
 	}
-
-	var wg sync.WaitGroup
-
-	for _, w := range workers {
-		go func() {
-			for task := range w.JobQueue {
-				config.Log.Debugf("Worker-%d start execute task", w.Id)
-				task()
-				wg.Done()
-			}
-		}()
-	}
-
-	config.Log.Info("Start analyse task")
-	ticker := time.NewTicker(500 * time.Millisecond)
-
-	defer ticker.Stop()
-
-	for range ticker.C {
-		wg.Add(1)
-		config.Log.Debugf("<- Append task to queue")
-		taskQueue <- func() {
-			processor.Process()
-		}
-	}
-
-	wg.Wait()
-
-	select {}
+	pool.Execute()
 }
-
-//func schedule(db *sql.DB, taskQueue chan service.Task, processor service.Processor) {
-//	config.Log.Info("Start analyse task")
-//	ticker := time.NewTicker(500 * time.Millisecond)
-//
-//	defer ticker.Stop()
-//
-//	for range ticker.C {
-//		config.Log.Infof("<- Append task to queue")
-//		taskQueue <- func() {
-//			processor.Process()
-//		}
-//	}
-//}
 
 func applyMigrations() (*sql.DB, error) {
 	conn, err := sql.Open("pgx/v5", database)
