@@ -17,3 +17,7 @@ func (r *RealRedisCaller) Get(ctx context.Context, key string) (int64, error) {
 func (r *RealRedisCaller) Set(ctx context.Context, key string, value int64, expiration time.Duration) error {
 	return r.RedisClient.Set(ctx, key, value, expiration).Err()
 }
+
+func (r *RealRedisCaller) Exists(ctx context.Context, key string) (int64, error) {
+	return r.RedisClient.Exists(ctx, key).Result()
+}

@@ -40,6 +40,7 @@ type JupiterCaller interface {
 type RedisCaller[T any, R any] interface {
 	Get(ctx context.Context, key T) (R, error)
 	Set(ctx context.Context, key T, value R, expiration time.Duration) error
+	Exists(ctx context.Context, key T) (int64, error)
 }
 
 type TokenFetcher interface {

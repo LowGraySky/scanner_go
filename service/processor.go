@@ -35,6 +35,7 @@ func (r *RealProcessor) Process() {
 	config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
 	block, err := r.getBlockWithRetryIfNotAvailbale(slotNumber)
 	if err != nil {
+		config.Log.Errorf("Error when find block by number: %d, error: %q", slotNumber, err.Error())
 		return
 	}
 	orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
@@ -46,6 +47,14 @@ func (r *RealProcessor) Process() {
 }
 
 func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.GetBlockResponseBody, error) {
+	exists, err := r.RedisCaller.Exists(ctx, uintToString(slotNumber))
+	if err != nil {
+		config.Log.Warnf("Error when find slot %d in redis", slotNumber)
+	}
+	if exists == 1 {
+		config.Log.Infof("Block %d already processed yerlier, skip", slotNumber)
+		return model.GetBlockResponseBody{}, nil
+	}
 	block, _ := r.SolanaCaller.GetBlock(slotNumber)
 	if block.Error.Code == -32004 {
 		config.Log.Infof("Block not available for slot: %d, retry request", slotNumber)
@@ -55,6 +64,12 @@ func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.
 		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
 		return model.GetBlockResponseBody{}, errors.New("unsuccess request")
 	}
+	slotStringNumber := uintToString(slotNumber)
+	err1 := r.RedisCaller.Set(ctx, slotStringNumber, 1, time.Duration(30)*time.Second)
+	if err1 != nil {
+		config.Log.Warnf("Unsuccess put block: %d to redis, error: %q", slotNumber, err1.Error())
+	}
+	config.Log.Debugf("Success put block %d to redis", slotNumber)
 	return block, nil
 }
 
@@ -139,6 +154,10 @@ func (r *RealProcessor) constructTelegramMessage(transactionData model.Transacti
 	}
 }
 
+func uintToString(val uint) string {
+	return strconv.FormatUint(uint64(val), 10)
+}
+
 func calculateExpirationTime(data model.TransactionData) time.Duration {
 	end := eta(data.InstructionData)
 	return time.Duration(end+15) * time.Minute
@@ -153,7 +172,7 @@ func round(val string) int {
 func eta(data model.InstructionData) uint {
 	v1, _ := strconv.Atoi(data.InAmount)
 	v2, _ := strconv.Atoi(data.InAmountPerCycle)
-	return uint(v1 / v2) 
+	return uint(v1 / v2)
 }
 
 func calculatePriceChange(instruction model.InstructionData) float32 {
