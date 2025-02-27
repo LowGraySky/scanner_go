@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"strconv"
+	"sync"
 	"time"
 	"web3.kz/solscan/config"
 	"web3.kz/solscan/model"
@@ -15,6 +16,7 @@ const (
 )
 
 var ctx = context.Background()
+var slotMap sync.Map
 
 type RealProcessor struct {
 	Analyser       Analyser
@@ -33,28 +35,29 @@ func (r *RealProcessor) Process() {
 	}
 	slotNumber := slot.Result
 	config.Log.Infof("Begin analyse slot with number: %d", slotNumber)
+	_, exists := slotMap.Load(slotNumber)
+	if exists == true {
+		config.Log.Infof("Slot %d already processed yerlier, skip", slotNumber)
+		return
+	}
 	block, err := r.getBlockWithRetryIfNotAvailbale(slotNumber)
 	if err != nil {
 		config.Log.Errorf("Error when find block by number: %d, error: %q", slotNumber, err.Error())
 		return
 	}
+	slotMap.Store(slotNumber, nil)
+	config.Log.Debugf("Append slot with number: %d to slot map", slotNumber)
 	orders := r.Analyser.Analyse(slotNumber, block.Result.Transactions)
 	if len(orders) == 0 {
 		config.Log.Infof("Slot with number %d not exists DCA orders!", slotNumber)
 	} else {
 		r.processTransactions(slotNumber, orders)
 	}
+	slotMap.Delete(slotNumber)
+	config.Log.Debugf("Finish procees slot: %d, delet from slot map", slotNumber)
 }
 
 func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.GetBlockResponseBody, error) {
-	exists, err := r.RedisCaller.Exists(ctx, uintToString(slotNumber))
-	if err != nil {
-		config.Log.Warnf("Error when find slot %d in redis", slotNumber)
-	}
-	if exists == 1 {
-		config.Log.Infof("Block %d already processed yerlier, skip", slotNumber)
-		return model.GetBlockResponseBody{}, nil
-	}
 	block, _ := r.SolanaCaller.GetBlock(slotNumber)
 	if block.Error.Code == -32004 {
 		config.Log.Infof("Block not available for slot: %d, retry request", slotNumber)
@@ -64,12 +67,6 @@ func (r *RealProcessor) getBlockWithRetryIfNotAvailbale(slotNumber uint) (model.
 		config.Log.Errorf("Error when get block information by slot with number: %d, error: %s", slotNumber, block.Error)
 		return model.GetBlockResponseBody{}, errors.New("unsuccess request")
 	}
-	slotStringNumber := uintToString(slotNumber)
-	err1 := r.RedisCaller.Set(ctx, slotStringNumber, 1, time.Duration(30)*time.Second)
-	if err1 != nil {
-		config.Log.Warnf("Unsuccess put block: %d to redis, error: %q", slotNumber, err1.Error())
-	}
-	config.Log.Debugf("Success put block %d to redis", slotNumber)
 	return block, nil
 }
 
