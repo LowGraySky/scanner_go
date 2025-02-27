@@ -32,8 +32,8 @@ func (w *Worker) Run() {
 
 func (ep *RealExecutorPool) Execute() {
 	taskQueue := make(chan Task)
-	workers := make([]Worker, 5)
-	for i := 1; i <= 5; i++ {
+	workers := make([]Worker, ep.ExecutorsCount)
+	for i := 1; i <= ep.ExecutorsCount; i++ {
 		workers[i-1] = Worker{
 			Id:       uint(i),
 			JobQueue: taskQueue,

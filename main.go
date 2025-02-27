@@ -40,7 +40,7 @@ func main() {
 	redisClient := redis.NewClient(&redisOptions)
 	processor := initProcessor(db, bot, redisClient)
 	pool := service.RealExecutorPool{
-		ExecutorsCount: 5,
+		ExecutorsCount: 10,
 		Processor:      processor,
 	}
 	pool.Execute()
