@@ -49,7 +49,7 @@ func (ep *RealExecutorPool) Execute() {
 
 func (ep *RealExecutorPool) schedule(taskQueue chan Task) {
 	config.Log.Info("Start analyse task")
-	ticker := time.NewTicker(300 * time.Millisecond)
+	ticker := time.NewTicker(400 * time.Millisecond)
 
 	defer ticker.Stop()
 

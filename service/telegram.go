@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	chatId int64 = 8135757102
+	chatId int64 = -4706148362
 )
 
 type RealTelegramCaller struct {
